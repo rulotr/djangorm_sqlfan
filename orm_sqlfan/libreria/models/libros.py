@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from .editoriales import Editorial
 
 def validar_titulo(titulo):
     if 'cobol' in titulo:
@@ -18,6 +19,10 @@ class Libro(models.Model):
     desc_corta = models.CharField(max_length=2000, default='Sin reseña')
     estatus= models.CharField(max_length=1, choices=estatus_libro)
     categoria = models.CharField(max_length=50)
+
+    edicion_anterior = models.ForeignKey('self', null=True, default=None, on_delete=models.PROTECT)
+
+    editorial = models.ForeignKey(Editorial, on_delete=models.PROTECT)
 
     class Meta:
         constraints = [models.CheckConstraint(check=~models.Q(titulo='cobol'), name='titulo_no_permitido_chk')]
