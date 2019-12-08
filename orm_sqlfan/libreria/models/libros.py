@@ -8,7 +8,6 @@ def validar_titulo(titulo):
     return titulo
 
 class Libro(models.Model):
-
     estatus_libro = (('P', 'Publish'),('M','MEAP'))
 
     isbn = models.CharField(max_length=13, primary_key=True)
