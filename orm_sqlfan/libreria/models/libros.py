@@ -1,8 +1,15 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist,ValidationError
-from .editoriales import Editorial
+from django.db.models import Avg, Min, Max, Count, Sum
 
-class LibroManager(models.Manager):
+from .editoriales import Editorial
+from django_tabulate import TabulateMixin
+from django_tabulate import tabulate_qs
+
+
+
+
+class LibroManager(models.Manager, TabulateMixin):
     def buscar_por_isbn(self, isbn):
         try:
             buscado = self.get(pk=isbn)
@@ -42,6 +49,7 @@ class LibroManager(models.Manager):
         consulta1 = self.filter(paginas=200)
         consulta2 =  self.filter(paginas=300)
         consulta = (consulta1 | consulta2).values('isbn','paginas')
+        return consulta
 
     def Libros_publicados_en_el_año(self, año):
         consulta = self.filter(fecha_publicacion__year=año)
@@ -59,18 +67,17 @@ class LibroManager(models.Manager):
         return consulta
 
     def el_cuarto_libro_con_mas_paginas(self):
-        consulta = self.values('isbn','paginas').order_by('-paginas')[4]
+        consulta = self.values('isbn','paginas').order_by('-paginas')[3]
         return consulta
 
-    def los_cinco_libros_con_mas_paginas(self):
-        consulta = self.values('isbn','paginas').order_by('-paginas')[0:5]
+    def el_cuarto_y_quintoi_libro_con_mas_paginas(self):
+        consulta = self.values('isbn','paginas').order_by('-paginas')[3:5]
         return consulta
-
 
     def LibroPorPaginas(self, pagina):
         import math
 
-        total_filas = self.count()
+        total_filas = Libro.objects.count()
         filas_por_pagina = 5
         total_paginas = math.ceil(total_filas / filas_por_pagina)
 
@@ -78,18 +85,71 @@ class LibroManager(models.Manager):
         inicial = final - filas_por_pagina
 
         print(f'Pagina {pagina} / {total_paginas}')
-        consulta = self.all().order_by('isbn')[inicial:final]
+        consulta = Libro.objects.all().order_by('isbn')[inicial:final]
+
         return consulta
 
-    def LibroPorPaginasDjango(self, pagina):
+    def LibroPorPaginasDjango(self,pagina):
         from django.core.paginator import Paginator
-        p = Paginator(self.all().order_by('isbn'), 5)
-        print (f'Pagina {pagina} / {p.num_pages}')
+        p = Paginator(Libro.objects.all().order_by('isbn'), 5 )
+        print(f'Pagina {pagina} / {p.num_pages}')
         pag = p.page(pagina)
         return pag.object_list
 
+    # funciones de Agregacion Min, Max, Avg, Sum
+
+    def minimo_paginas_para_un_libro(self):
+        return self.filter(paginas__gt=0).aggregate(Min('paginas'))
+
+    def maximo_paginas_para_un_libro(self):
+        return self.filter(paginas__gt=0).aggregate(Max('paginas'))
+
+    def numero_de_libros_de_python_agrupados_por_categoria(self):
+        consulta = self.filter(categoria__contains='python').aggregate(Sum('paginas'))
+        return consulta
 
 
+    # Agrupaciones
+
+    def numero_de_libros_de_python_agrupados_por_categoria(self):
+        consulta = self.filter(categoria__contains='python').values('categoria').annotate(NumeroLibros=Count('*'), PromedioPaginas=Avg('paginas'), MinPaginas=Min('paginas'))
+        return consulta
+
+    def numero_de_libros_de_python_agrupados_por_categoria_y_editorial(self):
+        consulta = self.filter(categoria__contains='python').values('categoria','editorial__nombre').annotate(NumeroLibros=Count('*'))
+        # return consulta
+        return consulta.filter(NumeroLibros__gt=1)
+
+    def fechas_de_publicacion_con_mas_de_5_libros(self):
+        consulta = self.values('fecha_publicacion').annotate(cant_fec_pub=Count('fecha_publicacion')).filter(cant_fec_pub__gte=5)
+        return consulta
+
+    def cuales_son_los_libros_de_la_consulta_anterior_forma1(self):
+        consulta1 = self.fechas_de_publicacion_con_mas_de_5_libros()
+
+        fechas_encontradas = [lib['fecha_publicacion'] for lib in consulta1]
+
+        consulta = self.filter(fecha_publicacion__in= fechas_encontradas)
+        return consulta
+
+    def cuales_son_los_libros_de_la_consulta_anterior_forma2(self):
+        consulta1 = self.fechas_de_publicacion_con_mas_de_5_libros().values_list('fecha_publicacion')
+        consulta = self.filter(fecha_publicacion__in= consulta1).values('isbn')
+        return consulta
+
+    def distinct_de_paginas_menores_a_200(self):
+        consulta = self.values('paginas').filter(paginas__lt=200).distinct()
+        return consulta
+
+
+
+#0 {'isbn': '1884777929', 'paginas': 1101},
+#1 {'isbn': '1935182129', 'paginas': 1096},
+#2 {'isbn': '1884777678', 'paginas': 1088},
+#3 {'isbn': '1617290319', 'paginas': 925},
+#4 {'isbn': '1932394885', 'paginas': 880},
+#5 {'isbn': '188477749X', 'paginas': 860},
+#6 {'isbn': '1935182048', 'paginas': 848},
 
 
 
@@ -103,7 +163,7 @@ class Libro(models.Model):
 
     isbn = models.CharField(max_length=13, primary_key=True)
     titulo = models.CharField(max_length=70, blank=True, validators=[validar_titulo,])
-    paginas = models.PositiveIntegerField()
+    paginas = models.PositiveIntegerField(db_index=True,)
     fecha_publicacion = models.DateField(null=True)
     imagen = models.URLField(max_length=85, null=True)
     desc_corta = models.CharField(max_length=2000, default='Sin reseña')
