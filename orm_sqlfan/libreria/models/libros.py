@@ -1,15 +1,14 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist,ValidationError
 from django.db.models import Avg, Min, Max, Count, Sum
+from django.db.models import CharField, Case, F, Q, Value as V, When
+from django.db.models.functions import Concat, Left, Length, Replace
+
 
 from .editoriales import Editorial
-from django_tabulate import TabulateMixin
-from django_tabulate import tabulate_qs
 
 
-
-
-class LibroManager(models.Manager, TabulateMixin):
+class LibroManager(models.Manager):
     def buscar_por_isbn(self, isbn):
         try:
             buscado = self.get(pk=isbn)
@@ -141,16 +140,54 @@ class LibroManager(models.Manager, TabulateMixin):
         consulta = self.values('paginas').filter(paginas__lt=200).distinct()
         return consulta
 
+    # Avanzadas
 
+    def desc_corta_resumida(self):
+        consulta = self.annotate(longitud = Length('desc_corta')).annotate(
+            desc_resumida = Case(
+                      When(longitud__gt=50, then = Concat(Left('desc_corta',50), V('...'))),
+                      default=('desc_corta'),
+                      output_field=CharField(),
+                      )).filter(isbn__in=('1933988592','1884777791','1884777589','193239415X','1933988495')).values('isbn','desc_resumida','longitud')
 
-#0 {'isbn': '1884777929', 'paginas': 1101},
-#1 {'isbn': '1935182129', 'paginas': 1096},
-#2 {'isbn': '1884777678', 'paginas': 1088},
-#3 {'isbn': '1617290319', 'paginas': 925},
-#4 {'isbn': '1932394885', 'paginas': 880},
-#5 {'isbn': '188477749X', 'paginas': 860},
-#6 {'isbn': '1935182048', 'paginas': 848},
+        return consulta
 
+    def titulo_inicia_igual_que_su_descripcion_corta(self):
+        consulta = self.annotate(tit50= Left('titulo',50), desc50= Left('desc_corta',50)).filter(tit50 = F('desc50')).values('isbn','tit50','desc50')
+        return consulta
+
+    def mostrar_categoria_sin_comilla(self):
+        consulta = self.annotate(categoria_sin_comillas = Replace('categoria', V('"'),V(''))).values('isbn','categoria','categoria_sin_comillas').filter(categoria__contains='python')
+        return consulta
+
+    def modfica_columna_categoria_quitando_corchetes(self):
+        self.filter(categoria='[]').update(categoria = Replace('categoria', V('[]'),V('')))
+
+    def libros_de_categoria_python_O_Java_O_net_version_corta(self):
+        consulta = self.filter(Q(categoria__contains='python') | Q(categoria__contains='java') | Q(categoria__contains='net') & ~Q(paginas=0))
+        return consulta
+
+    def consulta_libros_con_cronica(self):
+        consulta = self.select_related('librocronica').filter(categoria__contains='python')
+        return consulta
+
+    def consulta_libros_editorial_muchas_consultas(self):
+        consulta = self.all().filter(categoria__contains='python')
+        for libro in consulta:
+            print(libro.editorial.nombre)
+        return consulta
+
+    def consulta_libros_editorial_muchas_consultas_forma2(self):
+        consulta = self.all().select_related('editorial').filter(categoria__contains='python')
+        for libro in consulta:
+            print(libro.editorial.nombre)
+        return consulta
+
+    def consulta_libros_editorial_muchas_consultas_forma3(self):
+        consulta = self.all().filter(categoria__contains='python')
+
+        dic_libros = dict(consulta.values_list('isbn','editorial__nombre'))
+        return dic_libros
 
 
 def validar_titulo(titulo):
