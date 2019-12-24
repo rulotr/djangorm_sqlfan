@@ -8,4 +8,4 @@ class LibroCronica(models.Model):
     libro = models.OneToOneField(Libro, on_delete=models.CASCADE, primary_key=True)
 
     def __str__(self):
-        return "%s Cronica del libro " % self.libro.isb
+        return "%s Cronica del libro " % self.libro.isbn
