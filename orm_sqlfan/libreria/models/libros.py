@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist,ValidationError
 from django.db.models import Avg, Min, Max, Count, Sum
 from django.db.models import CharField, Case, F, Q, Value as V, When
 from django.db.models.functions import Concat, Left, Length, Replace
-
+from django.db.models import Prefetch
 
 from .editoriales import Editorial
 
@@ -188,6 +188,83 @@ class LibroManager(models.Manager):
 
         dic_libros = dict(consulta.values_list('isbn','editorial__nombre'))
         return dic_libros
+
+# prefetch_related
+
+    def autores_con_sus_libros_escritos_forma_inviable(self):
+        from .autores import Autor
+        autores = Autor.objects.filter(pk__in=(398,523))
+        for autor in autores:
+            print(f'Autor: {autor}')
+            print('Libros escritos:')
+            for libro in autor.libro.all():
+                print(libro.titulo)
+
+    def autores_con_sus_libros_escritos_forma_optima(self):
+        from .autores import Autor
+        autores = Autor.objects.filter(pk__in=(398,523)).prefetch_related('libro')
+        for autor in autores:
+            print(f'Autor: {autor}')
+            print('Libros escritos:')
+            for libro in autor.libro.all():
+                print(libro.titulo)
+
+    def autores_con_sus_libros_escritos_y_editoriales_forma_inviable(self):
+        from .autores import Autor
+        autores = Autor.objects.filter(pk__in=(398,523)).prefetch_related('libro')
+        for autor in autores:
+            print(f'Autor: {autor}')
+            print('Libros escritos:')
+            for libro in autor.libro.all():
+                print(f'{libro.isbn} Editorial: {libro.editorial.nombre}')
+
+    def autores_con_sus_libros_escritos_y_editoriales_forma_optima(self):
+        from .autores import Autor
+        autores = Autor.objects.filter(pk__in=(398,523)).prefetch_related('libro__editorial')
+        for autor in autores:
+            print(f'Autor: {autor}')
+            print('Libros escritos:')
+            for libro in autor.libro.all():
+                print(f'{libro.isbn} Editorial: {libro.editorial.nombre}')
+
+    def autores_con_sus_libros_escritos_y_editoriales_usando_prefecth(self):
+        from .autores import Autor
+
+        libro_y_editorial = Libro.objects.select_related('editorial')
+
+        autores = Autor.objects.filter(pk__in=(398,523)).prefetch_related(
+            Prefetch('libro', queryset=libro_y_editorial))
+
+        for autor in autores:
+            print(f'Autor: {autor}')
+            print('Libros escritos:')
+            for libro in autor.libro.all():
+                print(f'{libro.isbn} Editorial: {libro.editorial.nombre}')
+
+
+    def autores_con_sus_libros_escritos_y_editoriales_usando_prefecth_con_atributo(self):
+        from .autores import Autor
+
+        libro_y_editorial = Libro.objects.filter(titulo__contains='u').select_related('editorial')
+
+        autores = Autor.objects.filter(pk__in=(398,523)).prefetch_related(
+            Prefetch('libro', queryset=libro_y_editorial, to_attr='libaut'))
+
+        for autor in autores:
+            print(f'Autor: {autor}')
+            print('Libros escritos:')
+            for libro in autor.libaut:
+                print(f'{libro.isbn} Editorial: {libro.editorial.nombre}')
+
+   # Relacion inversa Libros - Autores
+    def libros_con_sus_autores_y_su_editorial_optima(self):
+        libros = self.filter(isbn__in=('1617290475', '1935182048')).select_related('editorial').prefetch_related('libros_autores')
+
+        for p in libros:
+            print(f'{p.isbn} - {p.titulo} Editorial: {p.editorial.nombre}  Escrito por:')
+            for q in p.libros_autores.all():
+                print(f'{q.nombre} ')
+
 
 
 def validar_titulo(titulo):
