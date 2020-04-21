@@ -14,7 +14,7 @@ def cargar_script_vista():
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('libreria', '0018_auto_20191220_2054'),
+        ('libreria', '0002_auto_20191210_0429'),
     ]
 
     operations = [

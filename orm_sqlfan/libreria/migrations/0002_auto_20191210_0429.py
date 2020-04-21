@@ -12,7 +12,7 @@ def cargar_datos_desde_sql():
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('libreria', '0016_autor_libro'),
+        ('libreria', '0001_initial'),
     ]
 
     operations = [

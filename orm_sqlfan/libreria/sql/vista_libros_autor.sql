@@ -3,7 +3,7 @@ DROP VIEW IF EXISTS v_libroautores;
 
 create view v_libroautores as
     select lib.isbn as id, lib.isbn,lib.titulo,
-    GROUP_CONCAT(aut.nombre) as Autores
+    string_agg(aut.nombre, ',') as Autores
     from libreria_libro as  lib
     left join libreria_autorcapitulo as rel
     on rel.libro_id = lib.isbn

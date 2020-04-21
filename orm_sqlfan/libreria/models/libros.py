@@ -4,8 +4,13 @@ from django.db.models import Avg, Min, Max, Count, Sum
 from django.db.models import CharField, Case, F, Q, Value as V, When
 from django.db.models.functions import Concat, Left, Length, Replace
 from django.db.models import Prefetch
+from django.db.models import Window
 
 from .editoriales import Editorial
+from django_tabulate import tabulate_qs
+
+def imprimir(func):
+    print(tabulate_qs(func))
 
 
 class LibroManager(models.Manager):
@@ -264,6 +269,20 @@ class LibroManager(models.Manager):
             print(f'{p.isbn} - {p.titulo} Editorial: {p.editorial.nombre}  Escrito por:')
             for q in p.libros_autores.all():
                 print(f'{q.nombre} ')
+
+    def libro_function_row_number(self):
+        from django.db.models.functions import RowNumber
+
+        row_number = Window(
+                    expression=RowNumber(),
+                    partition_by=[F('editorial__nombre')],
+                    order_by=F('paginas').desc()
+                )
+
+        filtro_row_number =Libro.objects.select_related('editorial').annotate(
+            num_fila=row_number).filter(editorial__nombre__in=('Siglo XXI','Tecnos')).values('isbn','paginas','editorial__nombre','num_fila')
+        imprimir(filtro_row_number)
+
 
 
 

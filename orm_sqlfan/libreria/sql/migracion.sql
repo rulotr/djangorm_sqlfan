@@ -1,15 +1,3 @@
-delete from libreria_autorcapitulo;
-delete from libreria_autor;
-delete from libreria_librocronica;
-delete from libreria_libro;
-delete from libreria_editorial;
-
-UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='libreria_autorcapitulo';
-UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='libreria_autor';
-UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='libreria_librocronica';
-UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='libreria_libro';
-UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='libreria_editorial';
-
 
 -- Editoriales
 INSERT INTO libreria_editorial (id, nombre) VALUES (1, 'Ariel');

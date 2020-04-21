@@ -17,3 +17,6 @@ six==1.13.0
 sqlparse==0.3.0
 traitlets==4.3.3
 wcwidth==0.1.7
+psycopg2==2.8.5
+tabulate==0.8.7
+django-tabulate==0.1.1
