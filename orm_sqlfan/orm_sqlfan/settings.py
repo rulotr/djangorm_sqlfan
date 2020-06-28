@@ -90,6 +90,7 @@ DATABASES = {
           'USER':  os.getenv('ORM_DB_USER'),
           'PASSWORD': os.getenv('ORM_DB_PASSWORD'),
           'HOST': 'localhost',
+          'ATOMIC_REQUESTS': True,
       },
 }
 # Password validation

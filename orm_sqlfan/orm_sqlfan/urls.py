@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from libreria.views import get_actualizar_libro_autor
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('libreria/', get_actualizar_libro_autor),
 ]
