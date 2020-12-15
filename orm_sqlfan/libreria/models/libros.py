@@ -6,12 +6,14 @@ from django.db.models.functions import Concat, Left, Length, Replace
 from django.db.models import Prefetch
 from django.db.models import Window
 from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.search import SearchVectorField
 
 from .editoriales import Editorial
 from django_tabulate import tabulate_qs
 
 def imprimir(func):
     print(tabulate_qs(func))
+
 
 
 class LibroManager(models.Manager):
@@ -30,6 +32,7 @@ class LibroManager(models.Manager):
     def obtener_el_ultimo_libro(self):
         consulta = self.all().last()
 
+
     def traer_con_limite_de_filas(self, filas):
         consulta =self.all()[:filas]
         return consulta
@@ -37,7 +40,7 @@ class LibroManager(models.Manager):
     def isbn_que_comienzan_por(self, isbn_buscar, **kwargs):
         consulta = self.filter(isbn__startswith=isbn_buscar, **kwargs)
         return consulta
-
+ 
     def libros_con_mas_de_200_paginas(self):
         consulta = self.filter(paginas__gt=200).exclude(isbn__in=('1933988592','1884777600')).order_by('paginas')
         return consulta
@@ -51,8 +54,8 @@ class LibroManager(models.Manager):
         return consulta
 
     def Libros_con_200_paginas_O_con_300_paginas(self):
-        consulta1 = self.filter(paginas=200)
-        consulta2 =  self.filter(paginas=300)
+        consulta1 = Libro.objects.filter(paginas=200)
+        consulta2 =  Libro.objects.filter(paginas=300)
         consulta = (consulta1 | consulta2).values('isbn','paginas')
         return consulta
 
@@ -70,7 +73,7 @@ class LibroManager(models.Manager):
         e1 = Editorial.objects.filter(nombre__contains='hill').values('nombre')
         consulta = a1.union(e1)
         return consulta
-
+ 
     def el_cuarto_libro_con_mas_paginas(self):
         consulta = self.values('isbn','paginas').order_by('-paginas')[3]
         return consulta
@@ -83,6 +86,7 @@ class LibroManager(models.Manager):
         import math
 
         total_filas = Libro.objects.count()
+        # Cantidad de filas a mostrar por pagina
         filas_por_pagina = 5
         total_paginas = math.ceil(total_filas / filas_por_pagina)
 
@@ -94,25 +98,29 @@ class LibroManager(models.Manager):
 
         return consulta
 
+
     def LibroPorPaginasDjango(self,pagina):
         from django.core.paginator import Paginator
+        # Recibe los registros a paginas y la cantidad de registros por pagina
         p = Paginator(Libro.objects.all().order_by('isbn'), 5 )
+        # y podemos obtener el numero de paginas
         print(f'Pagina {pagina} / {p.num_pages}')
+        # o los registros de una determinada pagina
         pag = p.page(pagina)
         return pag.object_list
 
     # funciones de Agregacion Min, Max, Avg, Sum
 
+
     def minimo_paginas_para_un_libro(self):
         return self.filter(paginas__gt=0).aggregate(Min('paginas'))
 
     def maximo_paginas_para_un_libro(self):
-        return self.filter(paginas__gt=0).aggregate(Max('paginas'))
+        return self.aggregate(Max('paginas'))
 
     def numero_de_libros_de_python_agrupados_por_categoria(self):
         consulta = self.filter(categoria__contains='python').aggregate(Sum('paginas'))
         return consulta
-
 
     # Agrupaciones
 
@@ -129,6 +137,7 @@ class LibroManager(models.Manager):
         consulta = self.values('fecha_publicacion').annotate(cant_fec_pub=Count('fecha_publicacion')).filter(cant_fec_pub__gte=5)
         return consulta
 
+
     def cuales_son_los_libros_de_la_consulta_anterior_forma1(self):
         consulta1 = self.fechas_de_publicacion_con_mas_de_5_libros()
 
@@ -136,6 +145,7 @@ class LibroManager(models.Manager):
 
         consulta = self.filter(fecha_publicacion__in= fechas_encontradas)
         return consulta
+
 
     def cuales_son_los_libros_de_la_consulta_anterior_forma2(self):
         consulta1 = self.fechas_de_publicacion_con_mas_de_5_libros().values_list('fecha_publicacion')
@@ -163,7 +173,7 @@ class LibroManager(models.Manager):
         return consulta
 
     def mostrar_categoria_sin_comilla(self):
-        consulta = self.annotate(categoria_sin_comillas = Replace('categoria', V('"'),V(''))).values('isbn','categoria','categoria_sin_comillas').filter(categoria__contains='python')
+        consulta = self.annotate(categoria_sin_comillas = Replace('categoria', V('"'),V('*'))).values('isbn','categoria','categoria_sin_comillas').filter(categoria__contains='python')
         return consulta
 
     def modfica_columna_categoria_quitando_corchetes(self):
@@ -178,7 +188,7 @@ class LibroManager(models.Manager):
         return consulta
 
     def consulta_libros_editorial_muchas_consultas(self):
-        consulta = self.all().filter(categoria__contains='python')
+        consulta = self.all().filter(categoria__icontains='python')
         for libro in consulta:
             print(libro.editorial.nombre)
         return consulta
@@ -308,6 +318,7 @@ class Libro(models.Model):
 
     editorial = models.ForeignKey(Editorial, on_delete=models.PROTECT)
     detalles = JSONField(null=True)
+    dsc_corta_token = SearchVectorField(null=True)
 
     class Meta:
         constraints = [models.CheckConstraint(check=~models.Q(titulo='cobol'), name='titulo_no_permitido_chk')]
