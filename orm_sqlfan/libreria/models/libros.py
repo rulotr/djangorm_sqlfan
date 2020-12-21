@@ -12,6 +12,8 @@ from django_tabulate import tabulate_qs
 def imprimir(func):
     print(tabulate_qs(func))
 
+# Si no corre el manager ejecutar:
+# python manage.py shell_plus --print-sql --settings=orm_sql
 
 class LibroManager(models.Manager):
     def buscar_por_isbn(self, isbn):
@@ -270,8 +272,100 @@ class LibroManager(models.Manager):
             for q in p.libros_autores.all():
                 print(f'{q.nombre} ')
 
+    def libro_function_count(self):
+
+        contar = Window(
+                    expression=Count('*'),
+                    partition_by=[F('paginas')],
+                )
+
+        filtro_row_number =(Libro.objects
+                    .annotate(num_libros=contar)
+                    .filter(paginas__gte=600)
+                    .values('isbn','paginas','num_libros'))  
+        imprimir(filtro_row_number)
+
+
+    def libro_function_sum_max_min(self):
+        ventana_conf = {
+            'partition_by': [F('editorial__nombre')],
+        }
+        ventana_conf_acum = {
+            'partition_by': [F('editorial__nombre')],
+            'order_by': [F('isbn')],
+        }
+
+        expresion_suma = Window( expression=Sum('paginas'), **ventana_conf)
+        expresion_min = Window( expression=Min('paginas'), **ventana_conf)
+        expresion_max = Window( expression=Max('paginas'), **ventana_conf)
+        expresion_prom = Window( expression=Avg('paginas'), **ventana_conf)
+        expresion_suma_acum = Window( expression=Sum('paginas'), **ventana_conf_acum)
+    
+        
+        filtro =(Libro.objects.select_related('editorial')
+        .annotate(
+                col_suma=expresion_suma,  col_promedio = expresion_prom,
+                col_minimo = expresion_min, col_maximo = expresion_max,
+                col_suma_acum = expresion_suma_acum
+            )
+            .filter(paginas__gte=600,editorial__nombre__in=('Siglo XXI','Tecnos'))
+            .values('isbn','paginas','editorial__nombre',
+            'col_suma','col_promedio','col_minimo','col_maximo','col_suma_acum'))
+        imprimir(filtro)
+
+
+    def libro_function_row_rank_dense(self):
+        from django.db.models.functions import RowNumber, Rank, DenseRank
+
+        ventana_conf = {
+            'partition_by': [F('editorial__nombre')],
+            'order_by': [F('paginas')],
+        }
+
+        expresion_rownumber = Window( expression=RowNumber(), **ventana_conf)
+        expresion_rank = Window( expression=Rank(), **ventana_conf)
+        expresion_denserank = Window( expression=DenseRank(), **ventana_conf)
+        
+        filtro =(Libro.objects.select_related('editorial')
+        .annotate(
+                col_rownumber=expresion_rownumber,
+                col_rank=expresion_rank,
+                col_denserank = expresion_denserank
+            )
+            .filter(paginas__gte=600,editorial__nombre__in=('Siglo XXI','Tecnos'))
+            .values('isbn','paginas','editorial__nombre',
+            'col_rownumber','col_rank','col_denserank'))
+        imprimir(filtro)
+
+
+    def libro_function_lag_lead(self):
+        from django.db.models.functions import Lag, Lead,FirstValue,LastValue 
+
+        ventana_conf = { 'partition_by': [F('editorial__nombre')],'order_by': [F('isbn')],}
+        
+        ventana_conf2 = {'partition_by': [F('editorial__nombre')],}
+
+        expresion_lag = Window( expression=Lag('paginas',1), **ventana_conf)
+        expresion_lead = Window( expression=Lead('paginas',1), **ventana_conf)
+        expresion_first = Window( expression=FirstValue('paginas'), **ventana_conf2)
+        expresion_last = Window( expression=LastValue('paginas'), **ventana_conf2)
+        
+        filtro =(Libro.objects.select_related('editorial')
+        .annotate(
+                col_lag=expresion_lag,
+                col_lead=expresion_lead,
+                col_first=expresion_first,
+                col_last=expresion_last,
+            )
+            .filter(paginas__gte=600,editorial__nombre__in=('Siglo XXI','Tecnos'))
+            .values('isbn','paginas','editorial__nombre',
+            'col_lag','col_lead','col_first','col_last'))
+        imprimir(filtro)
+
+
+
+
     def libro_function_row_number(self):
-        from django.db.models.functions import RowNumber
 
         row_number = Window(
                     expression=RowNumber(),
