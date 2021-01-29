@@ -12,6 +12,7 @@ import io
 from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
+from rest_framework.reverse import reverse
 
 # Models
 from libreria.models.editoriales import Editorial
@@ -153,3 +154,39 @@ def prueba_del_serializador_modelo_tipos():
     print(tabulate(data2, headers=["Serializer.Data"]))
     print("\n")
     print(tabulate(data3, headers=["Json"]))
+
+    # Relaciones inversas
+
+class LibroSerializerSencillo(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Libro
+        fields = ['isbn']
+
+class EditorialSerializerInverso(serializers.ModelSerializer):   
+    libro = LibroSerializerSencillo(many=True, read_only=True, source='libro_editorial')
+    class Meta:
+        model = Editorial
+        fields = ['nombre','pais','libro']
+
+def prueba_editorial_inversa():
+    editorial = Editorial.objects.get(pk=1)
+    serializer = EditorialSerializerInverso(editorial)    
+    json = JSONRenderer().render(serializer.data)
+    
+    # Imprimir datos
+    data = [[json]]
+    print(tabulate(data, headers=["json"]))
+
+    #Libro.objects.all().values('editorial').annotate(NumeroLibros=Count('*'))
+
+def prueba_editorial_inversa_muchos():
+    editorial = Editorial.objects.filter(pk__in=(1,2))
+    serializer = EditorialSerializerInverso(editorial, many=True)    
+    json = JSONRenderer().render(serializer.data)
+    
+    # Imprimir datos
+    data = [[json]]
+    print(tabulate(data, headers=["json"]))
+
+    #Libro.objects.all().values('editorial').annotate(NumeroLibros=Count('*'))

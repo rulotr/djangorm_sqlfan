@@ -286,7 +286,7 @@ class Libro(models.Model):
 
     edicion_anterior = models.ForeignKey('self', null=True, default=None, on_delete=models.PROTECT)
 
-    editorial = models.ForeignKey(Editorial, on_delete=models.PROTECT)
+    editorial = models.ForeignKey(Editorial, on_delete=models.PROTECT, related_name='libro_editorial',)
 
     class Meta:
         constraints = [models.CheckConstraint(check=~models.Q(titulo='cobol'), name='titulo_no_permitido_chk')]
