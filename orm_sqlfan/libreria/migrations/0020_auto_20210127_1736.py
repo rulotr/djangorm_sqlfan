@@ -10,19 +10,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='VLibroautores',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('isbn', models.CharField(blank=True, max_length=13, null=True)),
-                ('titulo', models.CharField(blank=True, max_length=70, null=True)),
-                ('autores', models.TextField(blank=True, db_column='Autores', null=True)),
-            ],
-            options={
-                'db_table': 'v_libroautores',
-                'managed': False,
-            },
-        ),
+        # migrations.CreateModel(
+        #     name='VLibroautores',
+        #     fields=[
+        #         ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+        #         ('isbn', models.CharField(blank=True, max_length=13, null=True)),
+        #         ('titulo', models.CharField(blank=True, max_length=70, null=True)),
+        #         ('autores', models.TextField(blank=True, db_column='Autores', null=True)),
+        #     ],
+        #     options={
+        #         'db_table': 'v_libroautores',
+        #         'managed': False,
+        #     },
+        # ),
         migrations.AddField(
             model_name='editorial',
             name='pais',

@@ -13,8 +13,11 @@ from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from rest_framework.reverse import reverse
+from django.db.models import Prefetch
+
 
 # Models
+from libreria.models.autores import Autor
 from libreria.models.editoriales import Editorial
 from libreria.models.libros import Libro
 
@@ -157,36 +160,74 @@ def prueba_del_serializador_modelo_tipos():
 
     # Relaciones inversas
 
+
+class EditorialSerializerSencillo(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Editorial
+        fields = ['nombre','pais']
+
+
 class LibroSerializerSencillo(serializers.ModelSerializer):
+    #editorial =EditorialSerializerSencillo()
     
     class Meta:
         model = Libro
         fields = ['isbn']
+
 
 class EditorialSerializerInverso(serializers.ModelSerializer):   
     libro = LibroSerializerSencillo(many=True, read_only=True, source='libro_editorial')
     class Meta:
         model = Editorial
         fields = ['nombre','pais','libro']
-
+    
 def prueba_editorial_inversa():
     editorial = Editorial.objects.get(pk=1)
     serializer = EditorialSerializerInverso(editorial)    
     json = JSONRenderer().render(serializer.data)
     
     # Imprimir datos
-    data = [[json]]
-    print(tabulate(data, headers=["json"]))
+    import json
 
-    #Libro.objects.all().values('editorial').annotate(NumeroLibros=Count('*'))
+    with open('editorial_libros.json', 'w') as file:
+        json.dump(serializer.data, file, indent=1)
 
 def prueba_editorial_inversa_muchos():
-    editorial = Editorial.objects.filter(pk__in=(1,2))
-    serializer = EditorialSerializerInverso(editorial, many=True)    
-    json = JSONRenderer().render(serializer.data)
-    
+    editorial = Editorial.objects.filter(pk__in=(1,2)).prefetch_related('libro_editorial')
+
+    serializer = EditorialSerializerInverso( editorial, many=True)    
+
     # Imprimir datos
-    data = [[json]]
-    print(tabulate(data, headers=["json"]))
+    import json
+
+    with open('editorial_libros.json', 'w') as file:
+        json.dump(serializer.data, file, indent=1)
+
 
     #Libro.objects.all().values('editorial').annotate(NumeroLibros=Count('*'))
+
+    #Editorial.objects.all()[:3].select_related('libro_editorial')
+    #Libro.objects.all()[:3].select_related('editorial')
+    #Libro.objects.all()[:3].prefetch_related('editorial')
+
+class AutorSerializerProfundo(serializers.ModelSerializer):
+    libros = LibroSerializerSencillo(source='libaut', many=True)
+    
+    class Meta:
+        model = Autor
+        fields = ['nombre','libros']
+
+
+def prueba_autores_libros_editorial():
+        libro_y_editorial = Libro.objects.filter(titulo__contains='u').select_related('editorial')
+        autores = Autor.objects.filter(pk__in=(398,523)).prefetch_related(
+            Prefetch('libro', queryset=libro_y_editorial, to_attr='libaut'))
+
+        serializer = AutorSerializerProfundo( autores, many=True)    
+        # Imprimir datos
+        import json
+
+        with open('autor_libros_editorial.json', 'w') as file:
+            json.dump(serializer.data, file, indent=1)
+
