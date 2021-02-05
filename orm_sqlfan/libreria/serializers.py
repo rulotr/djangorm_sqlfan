@@ -4,7 +4,6 @@
 # Tambien podemos convertir los tipos de datos de python a datos complejos
 # esto es lo que se llama deserializacion
 
-
 # System
 import io
 
@@ -165,7 +164,7 @@ class EditorialSerializerSencillo(serializers.ModelSerializer):
     
     class Meta:
         model = Editorial
-        fields = ['nombre','pais']
+        fields = ['id','nombre','pais']
 
 
 class LibroSerializerSencillo(serializers.ModelSerializer):

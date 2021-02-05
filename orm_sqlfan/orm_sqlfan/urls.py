@@ -13,18 +13,42 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import debug_toolbar
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path,include
+
 from rest_framework.routers import DefaultRouter
-from libreria.views import EditorialViewSet,LibroViewSet
+#from libreria.views import editorial_detail
+
+from libreria import views
+#from libreria.views import EditorialViewSet,LibroViewSet
+
 
 # Creamos un router y registramos nuestros viewsets, en este caso solo uno
 router = DefaultRouter()
-router.register(r'editoriales', EditorialViewSet)
-router.register(r'libros', LibroViewSet)
+#router.register(r'editoriales', editorial_detail)
+#router.register(r'editoriales', EditorialViewSet)
+#router.register(r'libros', LibroViewSet)
 
 
 urlpatterns = [
+    path('__debug__/', include(debug_toolbar.urls)),
     path('admin/', admin.site.urls),
-    path(r'api/', include(router.urls)),    
+    #path('editorial/', views.editorial_list),
+    path('editorial/', views.EditorialLista.as_view()),
+    path('editorial/<int:pk>', views.editorial_detail, name='editorial-detail'),
+    path('editorial_mixin/', views.EditorialListAPIView.as_view()),
+    path('editorial_mixin/<int:pk>', views.EditorialDetailAPIView.as_view()),
+    path('editorial_generic/', views.EditorialCreateListView.as_view()),
+    path('editorial_GetDeletPutAPIView/<int:pk>', views.EditorialGetDeletePutListView.as_view()),
+    path('editorial_ListCreateAPIView/', views.EditorialListCreateAPIView.as_view()),
+    path('editorial_PersonalizadoView/<str:buscar>', views.EditorialPersonalizadoView.as_view()),
 ]
+
+# if settings.DEBUG:
+#     import debug_toolbar
+
+#     urlpatterns += [
+#         path('__debug__/', include(debug_toolbar.urls)),
+#     ]

@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+INTERNAL_IPS = ['127.0.0.1',]
 
 # Application definition
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'debug_toolbar',
     'rest_framework',
     'libreria',
 ]
@@ -50,9 +52,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-ROOT_URLCONF = 'orm_sqlfan.urls'
+
 
 TEMPLATES = [
     {
@@ -120,4 +123,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+# All settings common to all environments
 STATIC_URL = '/static/'
+
+
+ROOT_URLCONF = 'orm_sqlfan.urls'
+
+
+DEBUG_TOOLBAR_PANELS = [
+    #'ddt_request_history.panels.request_history.RequestHistoryPanel',  # Here it is
+    #'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    #'debug_toolbar.panels.templates.TemplatesPanel',
+    #'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    #'debug_toolbar.panels.cache.CachePanel',
+    #'debug_toolbar.panels.signals.SignalsPanel',
+    #'debug_toolbar.panels.logging.LoggingPanel',
+    #'debug_toolbar.panels.redirects.RedirectsPanel',
+    #'debug_toolbar.panels.profiling.ProfilingPanel',
+]

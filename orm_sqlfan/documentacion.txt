@@ -1,0 +1,27 @@
+Instalar  para ver los query en django
+    python -m pip install django-debug-toolbar
+
+INSTALLED_APPS = [
+    # ...
+    'django.contrib.staticfiles',
+    # ...
+    'debug_toolbar',
+]
+
+STATIC_URL = '/static/'
+
+MIDDLEWARE
+     'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+URL 
+    import debug_toolbar
+    path('__debug__/', include(debug_toolbar.urls)),
+
+INTERNAL_IPS = ("127.0.0.1")
+
+
+pip install django-debug-toolbar-request-history
+
+Error en windows:
+    Equipo\HKEY_CLASSES_ROOT\.js
+    "Content Type"="text/javascript"
