@@ -2,9 +2,10 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework import mixins, generics
+from rest_framework import viewsets
 
 from libreria.models import Editorial
 from libreria.serializers import EditorialSerializerSencillo
@@ -182,6 +183,74 @@ class EditorialPersonalizadoView(BusquedaPorDiferentesCamposMixin, generics.Retr
     serializer_class = EditorialSerializerSencillo
     busqueda_id ='id'
     busqueda_str = 'nombre'
-   
+
+# ViewSets
+# son clases parecidas a las clases view pero estas proporcionan read y update,create,list,retrieve por ejemplo en lugar
+# de get y put
+# Estas clases nos permiten realizar las interacciones del api y dejar que la gestion
+# de las urls se gestione de manera automatica.
+
+class EditorialExplicitoViewSet(viewsets.ViewSet):
+    def list(self, request):
+        """
+            Viendo las propiedades desde el metodo borrar
+        """
+        queryset = Editorial.objects.all()
+        serializer = EditorialSerializerSencillo(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Editorial.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = EditorialSerializerSencillo(user)
+        return Response(serializer.data)
+    
+    def create(self, request):
+        pass
+
+    def update(self, request, pk=None):
+        pass
+
+    def partial_update(self, request, pk=None):
+        pass
+
+    def destroy(self, request, pk=None):
+        """
+            Viendo las propiedades desde el metodo borrar
+        """
+        propiedades = {}
+        propiedades['basename'] = self.basename
+        propiedades['action'] = self.action
+        propiedades['detail'] = self.detail
+        propiedades['suffix'] = self.suffix
+        
+        return Response(propiedades)
+    
+
+
+class EditorialCortoViewSet(viewsets.ModelViewSet):
+    serializer_class = EditorialSerializerSencillo
+    queryset = Editorial.objects.all()
+
+    @action(detail=False)
+    def ultimas_editoriales(self, request):
+        ultimas_editoriales = Editorial.objects.all().order_by('-pk')[:5]
+
+        serializer = self.get_serializer(ultimas_editoriales, many=True)
+        return Response(serializer.data)
+    
+    
+    @action(detail=True, methods=['post', 'delete'])
+    def funcion_post_delete(self, request, pk=None):
+       pass
+
+class EditorialSoloLecturaViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    A simple ViewSet for viewing accounts.
+    """
+    queryset = Editorial.objects.all()
+    serializer_class = EditorialSerializerSencillo
+
+
 
 # http://www.cdrf.co

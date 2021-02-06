@@ -21,12 +21,20 @@ from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 #from libreria.views import editorial_detail
 
+
 from libreria import views
+from libreria.views import EditorialExplicitoViewSet, EditorialCortoViewSet,EditorialSoloLecturaViewSet
 #from libreria.views import EditorialViewSet,LibroViewSet
 
 
 # Creamos un router y registramos nuestros viewsets, en este caso solo uno
 router = DefaultRouter()
+router.register(r'editorial_explicito', EditorialExplicitoViewSet, basename='editorialexp')
+router.register(r'editorial_corto', EditorialCortoViewSet, basename='editorialcorto')
+router.register(r'editorial_lectura', EditorialSoloLecturaViewSet, basename='editoriallectura')
+
+
+
 #router.register(r'editoriales', editorial_detail)
 #router.register(r'editoriales', EditorialViewSet)
 #router.register(r'libros', LibroViewSet)
@@ -44,7 +52,11 @@ urlpatterns = [
     path('editorial_GetDeletPutAPIView/<int:pk>', views.EditorialGetDeletePutListView.as_view()),
     path('editorial_ListCreateAPIView/', views.EditorialListCreateAPIView.as_view()),
     path('editorial_PersonalizadoView/<str:buscar>', views.EditorialPersonalizadoView.as_view()),
+    path('api/', include(router.urls)),
+    # Format .json .api
 ]
+
+
 
 # if settings.DEBUG:
 #     import debug_toolbar
