@@ -230,3 +230,20 @@ def prueba_autores_libros_editorial():
         with open('autor_libros_editorial.json', 'w') as file:
             json.dump(serializer.data, file, indent=1)
 
+# filtro = {}
+# filtro['id'] =18
+# filtro['pais'] = None
+# Editorial.objects.filter(**filtro) 
+
+# query  = Q()
+# buscar = ['an','ba','za']
+# for valor in buscar:
+#    query |= Q(nombre__contains=valor)
+# query.connector = 'OR' 
+# query1= Q(pais='Mexico') 
+# query2 = Q()
+# query2.add(query1,Q.AND)
+# query2.add(query,Q.AND)
+# Editorial.objects.filter(query2)
+
+

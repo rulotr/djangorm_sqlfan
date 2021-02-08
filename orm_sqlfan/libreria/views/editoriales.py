@@ -6,9 +6,11 @@ from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework import mixins, generics
 from rest_framework import viewsets
+from rest_framework.parsers import JSONParser
 
 from libreria.models import Editorial
 from libreria.serializers import EditorialSerializerSencillo
+
 
 # Funciones basadas en vistas
 
@@ -47,6 +49,7 @@ def editorial_detail(request, pk):
 # Clases basadas en vistas
 
 class EditorialLista(APIView):
+    
     def get(self, request, format=None):
         editoriales = Editorial.objects.all()[:3]
         serializer = EditorialSerializerSencillo(editoriales, many=True)
@@ -248,6 +251,7 @@ class EditorialSoloLecturaViewSet(viewsets.ReadOnlyModelViewSet):
     """
     A simple ViewSet for viewing accounts.
     """
+    parser_classes = [JSONParser]
     queryset = Editorial.objects.all()
     serializer_class = EditorialSerializerSencillo
 
