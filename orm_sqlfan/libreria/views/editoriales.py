@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import mixins, generics
 from rest_framework import viewsets
 from rest_framework.parsers import JSONParser
+from rest_framework import filters
 
 from libreria.models import Editorial
 from libreria.serializers import EditorialSerializerSencillo
@@ -254,6 +255,63 @@ class EditorialSoloLecturaViewSet(viewsets.ReadOnlyModelViewSet):
     parser_classes = [JSONParser]
     queryset = Editorial.objects.all()
     serializer_class = EditorialSerializerSencillo
+
+
+# Filtros (Filtering)
+
+class EditorialFiltrosViewSet(viewsets.ReadOnlyModelViewSet):
+    parser_classes = [JSONParser]
+    queryset = Editorial.objects.all()
+    serializer_class = EditorialSerializerSencillo
+
+    def get_queryset(self):
+        #api/editorial_filtros/2
+        print(self.kwargs) # {'pk': '2'}
+        #api/editorial_filtros/?param1=1&param2=2
+        print(self.request.query_params)
+        #<QueryDict: {'param1': ['1'], 'param2': ['2']}>
+        # param1 = self.request.query_params.get('param1', None)
+
+        return self.queryset
+
+class EditorialFilterBackendListView(generics.ListAPIView):
+    #pip install django-filter
+    from django_filters.rest_framework import DjangoFilterBackend
+    
+    queryset = Editorial.objects.all()
+    serializer_class = EditorialSerializerSencillo
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['id','nombre']
+    #REST_FRAMEWORK = {
+    #'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    #}
+
+class FiltroPaisNoNulo(filters.BaseFilterBackend):
+    
+    def filter_queryset(self, request, queryset, view):
+        return queryset.exclude(pais=None) 
+
+class EditorialSearchFilterListView(generics.ListAPIView):
+    from rest_framework import filters
+    
+    queryset = Editorial.objects.all()
+    serializer_class = EditorialSerializerSencillo
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter,FiltroPaisNoNulo]
+    search_fields  = ['id','nombre']
+    ordering_fields = ['id', 'nombre']
+    ordering = ['id']
+    #editorial_filtersearch/?search=Ariel
+    #editorial_filtersearch/?search=A&ordering=nombre
+
+# Paginación
+# Ponerla de forma global
+# REST_FRAMEWORK = {
+#    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+#    'PAGE_SIZE': 100
+#}
+
+
+
 
 
 

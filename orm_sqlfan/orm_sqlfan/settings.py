@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'debug_toolbar',
     'rest_framework',
+    'django_filters',
     'libreria',
 ]
 
@@ -146,3 +147,18 @@ DEBUG_TOOLBAR_PANELS = [
     #'debug_toolbar.panels.redirects.RedirectsPanel',
     #'debug_toolbar.panels.profiling.ProfilingPanel',
 ]
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+#     'PAGE_SIZE': 3
+## /api/editorial_lectura/?page=4
+# }
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+#     # api/editorial_lectura/?limit=3&offset=5
+# }
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'orm_sqlfan.pagination.CustomPagination',
+}

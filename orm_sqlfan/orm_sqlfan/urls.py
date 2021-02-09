@@ -23,8 +23,10 @@ from rest_framework.routers import DefaultRouter
 
 
 from libreria import views
-from libreria.views import EditorialExplicitoViewSet, EditorialCortoViewSet,EditorialSoloLecturaViewSet
+from libreria.views import (EditorialExplicitoViewSet, EditorialCortoViewSet
+,EditorialSoloLecturaViewSet,EditorialFiltrosViewSet,EditorialFilterBackendListView)
 #from libreria.views import EditorialViewSet,LibroViewSet
+
 
 
 # Creamos un router y registramos nuestros viewsets, en este caso solo uno
@@ -32,6 +34,8 @@ router = DefaultRouter()
 router.register(r'editorial_explicito', EditorialExplicitoViewSet, basename='editorialexp')
 router.register(r'editorial_corto', EditorialCortoViewSet, basename='editorialcorto')
 router.register(r'editorial_lectura', EditorialSoloLecturaViewSet, basename='editoriallectura')
+router.register(r'editorial_filtros', EditorialFiltrosViewSet, basename='editorialfiltros')
+
 
 
 
@@ -54,6 +58,9 @@ urlpatterns = [
     path('editorial_PersonalizadoView/<str:buscar>', views.EditorialPersonalizadoView.as_view()),
     path('api/', include(router.urls)),
     # Format .json .api
+    path('editorial_filterbackend/', views.EditorialFilterBackendListView.as_view()),
+    path('editorial_filtersearch/', views.EditorialSearchFilterListView.as_view()),
+    
 ]
 
 
