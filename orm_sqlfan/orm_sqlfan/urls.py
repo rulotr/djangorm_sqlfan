@@ -60,7 +60,8 @@ urlpatterns = [
     # Format .json .api
     path('editorial_filterbackend/', views.EditorialFilterBackendListView.as_view()),
     path('editorial_filtersearch/', views.EditorialSearchFilterListView.as_view()),
-    
+    # manejo de exceciones
+    path('editorial_excepciones/', views.EditorialListaConExcepciones.as_view()),
 ]
 
 

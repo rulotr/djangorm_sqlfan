@@ -311,7 +311,34 @@ class EditorialSearchFilterListView(generics.ListAPIView):
 #}
 
 
+# Manejo de excepciones
 
+class EditorialListaConExcepciones(APIView):
+    
+    def get(self, request, format=None):
+        editoriales = Editorial.objects.all()[:3]
+        serializer = EditorialSerializerSencillo(editoriales, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        from orm_sqlfan.exceptions import Excepcion_FaltanCampos
+        from rest_framework import exceptions
+        serializer = EditorialSerializerSencillo(data=request.data)
+        
+        if serializer.is_valid(raise_exception=True):
+            validated_data = serializer.validated_data
+            # Convertir y guardar el modelo
+            editorial = Editorial(**validated_data)
+            editorial.save()
+
+            serializer2 = EditorialSerializerSencillo(editorial)    
+
+
+            return Response(serializer2.data, status=status.HTTP_201_CREATED)
+        #raise serializer.ValidationError()
+        #raise exceptions.ValidationError(serializer.errors)
+        #raise Excepcion_FaltanCampos(serializer.errors)
+        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

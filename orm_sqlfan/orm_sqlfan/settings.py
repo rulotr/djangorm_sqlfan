@@ -161,4 +161,5 @@ DEBUG_TOOLBAR_PANELS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'orm_sqlfan.pagination.CustomPagination',
+    'EXCEPTION_HANDLER': 'orm_sqlfan.exceptions.custom_exception_handler'
 }
