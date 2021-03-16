@@ -1,0 +1,88 @@
+Procedimientos Almacenados
+
+¿Hola tio como ejecuto un procedimiento almacenado'
+
+Hola antes de ir al codigo,  es importante
+preguntarnos porque debemos saber como ejecutar un procedimiento almacenado
+desde el orm de django, si en la actualidad cada vez son
+mas los proyectos que evitan tener la logica de negocios es un
+procedimiento almacenado,  sin embargo considero que hay tres
+casos de uso para usarlos.
+
+1. Cuando queremos utilizar caracteristicas
+de nuestra bd que aun no se han implementado en nuestro orm, por ejemplo
+hacer consultas de tabla de referencia cruzada o tambien conocidas como pivote
+2. Si queremos procesar datos de tablas con una gran cantidad de registros,
+   nos evita tener que enviar los datos al backend y procesarlos alli.
+3 Cuando estamos migrando nuestra aplicacion o integrandola con otra,
+  y nos dan los sp que hay que llamar porque no les interesa migrarlos 
+  al backend por el momento.
+
+Asi que creo que los procedimientos almacenados viviran con nosotros
+un buen tiempo, y saber convivir con ellos cuando nos los encontremos.
+
+ahora si vamos al codigo.
+
+
+
+es un procedimiento o funcion que esta almacenado 
+en la base de datos
+
+ventajas:
+	al ejectutarse directamente en la bd es probable que aumente el rendimiento 
+	de nuestra aplicacion
+
+Ejemplo
+
+# Postgres
+
+# retornando una consulta
+CREATE OR REPLACE FUNCTION mi_funcion(buscar varchar(50)) 
+RETURNS TABLE(id int,nombre varchar(100)) 
+AS $$
+BEGIN
+RETURN QUERY
+    SELECT a.id,a.nombre 
+	FROM libreria_editorial as a
+	WHERE buscar = CASE WHEN buscar='todos' then buscar else a.nombre END;
+
+END;
+$$ LANGUAGE plpgsql;
+
+#Usando una variable de salida
+CREATE OR REPLACE FUNCTION mi_funcion_out(buscar varchar(50),out resultado json,out saludo varchar(10)) 
+AS $$
+BEGIN
+     resultado=array_to_json(array_agg(row_to_json(t)))
+	from (
+		 SELECT a.id,a.nombre 
+		 FROM libreria_editorial as a
+		 WHERE buscar = CASE WHEN buscar='todos' then buscar else a.nombre END	
+	) t;
+	saludo='Hola mundo';
+END;
+$$ LANGUAGE plpgsql;
+
+
+# Django
+Usamos la base coneccion a la base de datos que tenemos
+
+# usando el procedimiento que retorna una consulta
+from django.db import connection
+
+c = connection.cursor()
+c.callproc('mi_funcion',['todos'])
+resultado = c.fetchall()
+c.fetchone()
+c.close()
+
+
+# usando el procedimiento con valores de salida
+
+with connection.cursor() as cursor:
+	cursor.callproc('mi_funcion_out',['todos'])
+	resultado = cursor.fetchone()
+print(f'json: {resultado[0]}')
+print('')
+print(f'saludo: {resultado[1]}')
+
