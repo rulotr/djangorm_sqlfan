@@ -1,6 +1,6 @@
 backcall==0.1.0
 decorator==4.4.1
-Django==2.2.7
+Django==2.2.18
 django-extensions==2.2.5
 ipython==7.9.0
 ipython-genutils==0.2.0
