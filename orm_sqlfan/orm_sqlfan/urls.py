@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from libreria import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('editorial/<int:pk>', views.editorial_detail, name='editorial-detail'),
 ]

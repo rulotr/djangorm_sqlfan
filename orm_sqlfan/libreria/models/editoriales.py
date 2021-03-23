@@ -10,6 +10,8 @@ from django.db import models
 
 class Editorial(models.Model):
     nombre = models.CharField(max_length=100)
+    pais = models.CharField(max_length=50, null=True)
+    
 
     class Meta:
         managed = True

@@ -1260,9 +1260,6 @@ With this book, you can confidently start using HTML5 today. The relevant, easy-
 
 
 -- AutorLibro
-INSERT INTO libreria_autorcapitulo (id, libro_id , autor_id, numero_capitulos) VALUES (1, '1933988673', 490, 0);
-INSERT INTO libreria_autorcapitulo (id, libro_id , autor_id, numero_capitulos) VALUES (2, '1933988673', 134, 0);
-INSERT INTO libreria_autorcapitulo (id, libro_id , autor_id, numero_capitulos) VALUES (3, '1933988673', 9, 0);
 INSERT INTO libreria_autorcapitulo (id, libro_id , autor_id, numero_capitulos) VALUES (4, '1935182722', 490, 0);
 INSERT INTO libreria_autorcapitulo (id, libro_id , autor_id, numero_capitulos) VALUES (5, '1935182722', 9, 0);
 INSERT INTO libreria_autorcapitulo (id, libro_id , autor_id, numero_capitulos) VALUES (6, '1617290084', 178, 0);
