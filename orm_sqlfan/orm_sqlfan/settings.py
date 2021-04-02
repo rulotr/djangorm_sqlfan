@@ -26,7 +26,7 @@ SECRET_KEY = 'myizuz$8rcrr!@br5i7@p6@_5i!ds17b@zs)e#m2bl_qihwu#^'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+#INTERNAL_IPS = ['127.0.0.1',]
 
 # Application definition
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
+    #'debug_toolbar',
     'libreria',
 ]
 
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'orm_sqlfan.urls'

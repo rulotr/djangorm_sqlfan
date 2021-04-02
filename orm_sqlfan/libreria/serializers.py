@@ -18,7 +18,7 @@ class EditorialSerializerBasico(serializers.Serializer):
 class EditorialSerializerModel(serializers.ModelSerializer):
     class Meta:
         model = Editorial
-        fields = ['nombre','pais']
+        fields = ['id','nombre','pais']
 #endregion
 
 #region
@@ -48,8 +48,8 @@ class LibroSerializer_Tipos(serializers.ModelSerializer):
     editorial1 = serializers.StringRelatedField(source='editorial')
     editorial2 = serializers.PrimaryKeyRelatedField(source='editorial',read_only=True)
     editorial3 = serializers.SlugRelatedField(queryset=Autor.objects.all(),source='libros_autores',slug_field='nombre',many=True)
-    editorial4 = serializers.HyperlinkedRelatedField(source='editorial',view_name='editorial-detail',read_only=True)
-    editorial5 = serializers.HyperlinkedIdentityField(source='editorial',view_name='editorial-detail',read_only=True)
+    editorial4 = serializers.HyperlinkedRelatedField(source='editorial',view_name='fv_editorial-detalle',read_only=True)
+    editorial5 = serializers.HyperlinkedIdentityField(source='editorial',view_name='fv_editorial-detalle',read_only=True)
     editorial6 = EditorialSerializerModel(source='editorial')
     editorial7 = EditorialCustom(source='editorial',read_only=True)
 
