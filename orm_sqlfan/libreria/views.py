@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 
 # Django Rest Framework
-from rest_framework import status
+from rest_framework import status, mixins, generics
 from rest_framework.views import APIView 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -106,7 +106,7 @@ class EditorialListaApiView(APIView):
         pag = p.page(num_pag)
         editoriales = pag.object_list
 
-        #editoriales = Editorial.objects.all()
+        editoriales = Editorial.objects.all()
         serializer = EditorialSerializerModel(editoriales, many=True)
         return Response(serializer.data)
     
@@ -157,4 +157,53 @@ class EditorialDetalleApiView(APIView):
             serializer_response  = EditorialSerializerModel(editorial)
             return Response(serializer_response.data)  
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#Vistas genericas
+
+class EditorialListaGenericApiView(mixins.ListModelMixin,mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset =Editorial.objects.all()
+    serializer_class = EditorialSerializerModel
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request):
+        return self.create(request, *args, **kwargs)
+
+
+class EditorialDetalleGenericApiView(mixins.RetrieveModelMixin, mixins.DestroyModelMixin,
+                    mixins.UpdateModelMixin,generics.GenericAPIView):
+    queryset =Editorial.objects.all()
+    serializer_class = EditorialSerializerModel
+
+    def perform_destroy(self, instance):
+        instance.pais ='Borrado Suave'
+        instance.save()
+
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    def delete(self,request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs) 
+    
+    def put(self, request, pk):
+        return self.update(request, *args, **kwargs)
+
+# Vistas concretas
+
+class PaginacionLarga(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+
+
+class EditorialListaConcretaGenericApiView(generics.ListAPIView,generics.CreateAPIView):
+    queryset =Editorial.objects.all()
+    serializer_class = EditorialSerializerModel
+    pagination_class = PaginacionLarga
+
+
+class EditorialListaMasConcretaGenericApiView(generics.ListCreateAPIView):
+    queryset =Editorial.objects.all()
+    serializer_class = EditorialSerializerModel
 
