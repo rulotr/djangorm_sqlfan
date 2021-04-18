@@ -26,7 +26,7 @@ SECRET_KEY = 'myizuz$8rcrr!@br5i7@p6@_5i!ds17b@zs)e#m2bl_qihwu#^'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-#INTERNAL_IPS = ['127.0.0.1',]
+INTERNAL_IPS = ['127.0.0.1',]
 
 # Application definition
 
@@ -130,6 +130,6 @@ STATIC_URL = '/static/'
 
 # Ponerla de forma global
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 3
-}
+     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+     'PAGE_SIZE': 3
+ }

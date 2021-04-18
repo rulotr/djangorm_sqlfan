@@ -9,7 +9,7 @@ from rest_framework.pagination import PageNumberPagination
 
 #Models, Serializers
 from .models import (Editorial, Libro)
-from .serializers import (EditorialSerializerModel, LibroSerializer_Tipos)
+from .serializers import (EditorialSerializerModel, LibroSerializer_Tipos,LibroSerializer)
 # Create your views here.
 
 # Vistas Basadas en funciones
@@ -207,3 +207,49 @@ class EditorialListaMasConcretaGenericApiView(generics.ListCreateAPIView):
     queryset =Editorial.objects.all()
     serializer_class = EditorialSerializerModel
 
+# Vista personalizada
+
+class ListaFiltradaMixin:
+    """
+    List a queryset.
+    Propiedades que usa pero no implementa
+    busqueda_id
+    busqueda_str
+    """
+
+    def mi_listado(self, request, *args, **kwargs):
+        filtro = {}
+
+        if("buscar" in self.request.query_params):
+            valor = self.request.query_params['buscar']
+            campo = self.busqueda_id if valor.isnumeric() else f'{self.busqueda_str}__contains'
+            filtro[campo] = valor
+            
+        queryset = self.get_queryset().filter(**filtro)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class EditorialListaCustomApiView(ListaFiltradaMixin, generics.GenericAPIView):
+    queryset =Editorial.objects.all()
+    serializer_class = EditorialSerializerModel
+    busqueda_id = 'pk'
+    busqueda_str = 'nombre'
+
+    def get(self, request, *args, **kwargs):
+        return self.mi_listado(request, *args, **kwargs)
+
+class LibroListaCustomApiView(ListaFiltradaMixin, generics.GenericAPIView):
+    queryset =Libro.objects.all().select_related('editorial')
+    serializer_class = LibroSerializer
+    busqueda_id = 'pk'
+    busqueda_str = 'titulo'
+
+    def get(self, request, *args, **kwargs):
+        return self.mi_listado(request, *args, **kwargs)

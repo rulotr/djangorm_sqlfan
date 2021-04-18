@@ -10,7 +10,9 @@ urlpatterns =[
    path('cv_editoriales/<int:pk>', views.EditorialDetalleApiView.as_view(), name='cv_editoriales_detalle'), 
    path('cg_editoriales/', views.EditorialListaGenericApiView.as_view(), name='cg_editoriales'),
    path('cg_editoriales/<int:pk>', views.EditorialDetalleGenericApiView.as_view(), name='cg_editoriales_detalle'),
-   path('cc_editoriales/', views.EditorialListaConcretaGenericApiView.as_view(), name='cc_editoriales_detalle')
+   path('cc_editoriales/', views.EditorialListaConcretaGenericApiView.as_view(), name='cc_editoriales_detalle'),
+   path('cp_editoriales/', views.EditorialListaCustomApiView.as_view(), name='cp_editoriales_detalle'),
+   path('cp_libros/', views.LibroListaCustomApiView.as_view(), name='cp_libros'),
 
  ]
 
