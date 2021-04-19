@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 
 # Django Rest Framework
-from rest_framework import status, mixins, generics
-from rest_framework.views import APIView 
-from rest_framework.decorators import api_view
+from rest_framework import status, mixins, generics, viewsets
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
@@ -235,6 +235,8 @@ class ListaFiltradaMixin:
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    def list(self, request, *args, **kwargs):
+        return self.mi_listado(request, *args, **kwargs)
 
 class EditorialListaCustomApiView(ListaFiltradaMixin, generics.GenericAPIView):
     queryset =Editorial.objects.all()
@@ -253,3 +255,73 @@ class LibroListaCustomApiView(ListaFiltradaMixin, generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.mi_listado(request, *args, **kwargs)
+
+# Vistas de conjunto
+
+
+class EditorialViewSet(viewsets.ViewSet):
+    def list(self, request):
+        """
+            Viendo las propiedades desde el metodo borrar
+        """
+        queryset = Editorial.objects.all()
+        serializer = EditorialSerializerModel(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Editorial.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = EditorialSerializerModel(user)
+        return Response(serializer.data)
+    
+
+    def update(self, request, pk=None):
+        pass
+
+    def partial_update(self, request, pk=None):
+        pass
+
+    def destroy(self, request, pk=None):
+        """
+            Viendo las propiedades desde el metodo borrar
+        """
+        propiedades = {}
+        propiedades['basename'] = self.basename # Nombre base de la url que utilizara
+        propiedades['action'] = self.action # La accion que realizara
+        propiedades['detail'] = self.detail # Si es un detalle o un listado
+        
+        return Response(propiedades)
+
+
+# Vistas Modelo de conjunto
+
+class EditorialCortoViewSet(viewsets.ModelViewSet):
+    queryset = Editorial.objects.all()
+    serializer_class = EditorialSerializerModel
+
+    @action(detail=False)
+    def ultimas_editoriales(self, request):
+        ultimas_editoriales = Editorial.objects.all().order_by('-pk')[:5]
+
+        serializer = self.get_serializer(ultimas_editoriales, many=True)
+        return Response(serializer.data)
+    
+    
+    @action(detail=True, methods=['post', 'delete'])
+    def funcion_post_delete(self, request, pk=None):
+       return Response('Hola soy otra accion')
+
+class EditorialSoloLecturaViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Editorial.objects.all()
+    serializer_class = EditorialSerializerModel
+
+
+class CreateListRetrieveViewSet(mixins.CreateModelMixin,
+                                ListaFiltradaMixin,
+                                mixins.RetrieveModelMixin,
+                                viewsets.GenericViewSet):
+    queryset = Editorial.objects.all()
+    serializer_class = EditorialSerializerModel
+    busqueda_id = 'pk'
+    busqueda_str = 'nombre'
+   

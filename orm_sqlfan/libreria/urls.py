@@ -1,5 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from libreria import views
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'vc_editorial',views.EditorialViewSet, basename='vc_editorial') 
+router.register(r'vcm_editorial',views.EditorialCortoViewSet) 
+router.register(r'vcsl_editorial',views.EditorialSoloLecturaViewSet) 
+router.register(r'vclr_editorial',views.CreateListRetrieveViewSet) 
 
 urlpatterns =[
    path('fv_editorial_falsa/<int:pk>', views.fv_editorial_falsa, name='fv_editorial-falsa'),
@@ -13,6 +20,6 @@ urlpatterns =[
    path('cc_editoriales/', views.EditorialListaConcretaGenericApiView.as_view(), name='cc_editoriales_detalle'),
    path('cp_editoriales/', views.EditorialListaCustomApiView.as_view(), name='cp_editoriales_detalle'),
    path('cp_libros/', views.LibroListaCustomApiView.as_view(), name='cp_libros'),
-
+   path('vistas/', include(router.urls))  
  ]
 
