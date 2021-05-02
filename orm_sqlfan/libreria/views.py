@@ -324,4 +324,35 @@ class CreateListRetrieveViewSet(mixins.CreateModelMixin,
     serializer_class = EditorialSerializerModel
     busqueda_id = 'pk'
     busqueda_str = 'nombre'
-   
+
+# Filtros
+
+from django_filters.rest_framework import DjangoFilterBackend
+
+from rest_framework import filters
+
+class FiltroPaisNoNulo(filters.BaseFilterBackend):
+    
+    def filter_queryset(self, request, queryset, view):
+        return queryset.exclude(editorial__pais=None) 
+
+
+class LibroConFiltros(generics.ListAPIView):
+
+    #queryset =Libro.objects.all().select_related('editorial').filter(paginas__gt=0)
+    serializer_class = LibroSerializer
+    filter_backends = [DjangoFilterBackend, FiltroPaisNoNulo, filters.SearchFilter, filters.OrderingFilter]
+    #filterset_fields = ['titulo','paginas','editorial__id']
+    filterset_fields = {
+        'paginas': ['gte','lte'],
+        'titulo': ['contains'],
+        'editorial__nombre': ['contains']
+    }
+    search_fields = ['titulo', 'editorial__nombre']
+    ordering_fields = ['pk', 'titulo']
+    ordering = ['pk']
+
+    def get_queryset(self):
+        queryset =Libro.objects.all().select_related('editorial')
+        return queryset.filter(paginas__gt=0)
+    

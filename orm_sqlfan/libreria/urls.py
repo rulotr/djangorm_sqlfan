@@ -20,6 +20,8 @@ urlpatterns =[
    path('cc_editoriales/', views.EditorialListaConcretaGenericApiView.as_view(), name='cc_editoriales_detalle'),
    path('cp_editoriales/', views.EditorialListaCustomApiView.as_view(), name='cp_editoriales_detalle'),
    path('cp_libros/', views.LibroListaCustomApiView.as_view(), name='cp_libros'),
-   path('vistas/', include(router.urls))  
+   path('vistas/', include(router.urls)), 
+   path('cf_libros/', views.LibroConFiltros.as_view(), name='cf_libros'),
+   
  ]
 
