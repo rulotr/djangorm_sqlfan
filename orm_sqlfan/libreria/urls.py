@@ -22,6 +22,7 @@ urlpatterns =[
    path('cp_libros/', views.LibroListaCustomApiView.as_view(), name='cp_libros'),
    path('vistas/', include(router.urls)), 
    path('cf_libros/', views.LibroConFiltros.as_view(), name='cf_libros'),
+   path('ex_editorial/', views.EditorialListaConExcepciones.as_view(), name='ex_editorial'),
    
  ]
 

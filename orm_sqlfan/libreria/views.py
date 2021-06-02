@@ -6,11 +6,13 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+from rest_framework import exceptions
 
 #Models, Serializers
 from .models import (Editorial, Libro)
 from .serializers import (EditorialSerializerModel, LibroSerializer_Tipos,LibroSerializer)
 # Create your views here.
+from orm_sqlfan.exceptions import Excepcion_FaltanCampos
 
 # Vistas Basadas en funciones
 
@@ -356,3 +358,30 @@ class LibroConFiltros(generics.ListAPIView):
         queryset =Libro.objects.all().select_related('editorial')
         return queryset.filter(paginas__gt=0)
     
+
+# Manejo de excepciones
+
+
+
+class EditorialListaConExcepciones(APIView):    
+    def get(self, request, format=None):
+        editoriales = Editorial.objects.all()[:3]
+        serializer = EditorialSerializerModel(editoriales, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = EditorialSerializerModel(data=request.data)
+        
+        if serializer.is_valid(raise_exception=False):
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        error = serializer.errors
+        #error["NuevoError"] = "Este es nuevo"
+        #raise exceptions.ValidationError(error)
+        raise Excepcion_FaltanCampos()
+
+
+
