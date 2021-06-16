@@ -23,6 +23,10 @@ urlpatterns =[
    path('vistas/', include(router.urls)), 
    path('cf_libros/', views.LibroConFiltros.as_view(), name='cf_libros'),
    path('ex_editorial/', views.EditorialListaConExcepciones.as_view(), name='ex_editorial'),
-   
+   path('imagen_editorial_json/', views.EditorialImagenJson.as_view(), name='imagen_editorial_json'),
+   path('imagen_editorial_htmlform/', views.EditorialImagenMultiParser.as_view(), name='imagen_editorial_htmlform'),
+   path('imagen_editorial_imagen/<str:filename>', views.EditorialImagenFileUploadParser.as_view(), name='imagen_editorial_imagen'),
+   path('imagen_editorial_borrar/<int:pk>', views.EditorialBorrarImagen.as_view(), name='imagen_editorial_borrar'), 
+
  ]
 

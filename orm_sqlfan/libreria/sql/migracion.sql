@@ -12,16 +12,16 @@ UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='libreria_editorial';
 
 
 -- Editoriales
-INSERT INTO libreria_editorial (id, nombre) VALUES (1, 'Ariel');
-INSERT INTO libreria_editorial (id, nombre) VALUES (2, 'Alianza');
-INSERT INTO libreria_editorial (id, nombre) VALUES (3, 'Tecnos');
-INSERT INTO libreria_editorial (id, nombre) VALUES (4, 'Síntesis');
-INSERT INTO libreria_editorial (id, nombre) VALUES (5, 'Cívitas');
-INSERT INTO libreria_editorial (id, nombre) VALUES (6, 'Siglo XXI');
-INSERT INTO libreria_editorial (id, nombre) VALUES (7, 'Tirant lo Blanch');
-INSERT INTO libreria_editorial (id, nombre) VALUES (8, 'Pirámide');
-INSERT INTO libreria_editorial (id, nombre) VALUES (9, 'Crítica');
-INSERT INTO libreria_editorial (id, nombre) VALUES (10, 'McGraw-Hill');
+INSERT INTO libreria_editorial (id, nombre, logo) VALUES (1, 'Ariel', '');
+INSERT INTO libreria_editorial (id, nombre, logo) VALUES (2, 'Alianza', '');
+INSERT INTO libreria_editorial (id, nombre, logo) VALUES (3, 'Tecnos', '');
+INSERT INTO libreria_editorial (id, nombre, logo) VALUES (4, 'Síntesis', '');
+INSERT INTO libreria_editorial (id, nombre, logo) VALUES (5, 'Cívitas', '');
+INSERT INTO libreria_editorial (id, nombre, logo) VALUES (6, 'Siglo XXI', '');
+INSERT INTO libreria_editorial (id, nombre, logo) VALUES (7, 'Tirant lo Blanch', '');
+INSERT INTO libreria_editorial (id, nombre, logo) VALUES (8, 'Pirámide', '');
+INSERT INTO libreria_editorial (id, nombre, logo) VALUES (9, 'Crítica', '');
+INSERT INTO libreria_editorial (id, nombre, logo) VALUES (10, 'McGraw-Hill', '');
 
 -- Autores
 INSERT INTO libreria_autor VALUES (1, 'Jason R. Weiss');

@@ -18,3 +18,4 @@ traitlets==4.3.3
 wcwidth==0.1.7
 djangorestframework==3.12.2
 tabulate==0.8.9
+drf-extra-fields==3.1.1

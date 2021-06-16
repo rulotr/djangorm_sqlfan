@@ -11,8 +11,8 @@ from django.db import models
 class Editorial(models.Model):
     nombre = models.CharField(max_length=100)
     pais = models.CharField(max_length=50, null=True)
+    logo = models.ImageField(null=True,blank=True, default='', upload_to='fotos/')
     
-
     class Meta:
         managed = True
         db_table = 'libreria_editorial'

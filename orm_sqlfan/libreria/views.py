@@ -1,3 +1,4 @@
+#from typing_extensions import Required
 from django.shortcuts import render, get_object_or_404
 
 # Django Rest Framework
@@ -383,5 +384,107 @@ class EditorialListaConExcepciones(APIView):
         #raise exceptions.ValidationError(error)
         raise Excepcion_FaltanCampos()
 
+# Formas de subir una imagen o archivo
+from rest_framework import serializers
+from drf_extra_fields.fields import Base64ImageField
 
+class EditorialSerializerImagenJson(serializers.ModelSerializer):
+    logo = Base64ImageField(required=False)
+    class Meta:
+        model = Editorial
+        fields = ['nombre','logo']
+
+class EditorialImagenJson(APIView): 
+    def get(self, request, *args):
+        print(str(self.parser_classes))
+        return Response({'parsers':' '.join(map(str,self.parser_classes))} ,status=204)
+
+    def post(self, request):
+            serializer = EditorialSerializerImagenJson(data=request.data)
+            if serializer.is_valid():
+                validated_data = serializer.validated_data
+                archivo = validated_data['logo']
+                archivo.name ='mi_foto.png'
+                validated_data['logo'] = archivo
+                # Convertir y guardar el modelo
+                editorial = Editorial(**validated_data)
+                editorial.save()
+
+                serializer_response = EditorialSerializerImagenJson(editorial)    
+            
+                return Response(serializer_response.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Enviado por medio de HTML Form
+class EditorialSerializerNormal(serializers.ModelSerializer):
+    class Meta:
+        model = Editorial
+        fields = ['nombre','logo']
+
+
+class EditorialImagenMultiParser(APIView):
+    #parser_classes = (FormParser, MultiPartParser,)
+
+    def post(self, request):
+        if 'logo' not in request.data:
+            raise exceptions.ParseError("No has seleccionado el archivo a subir")
+        
+        archivos = str(request.FILES)
+
+        #archivos = str(request.FILES.getlist('imagen1'))
+
+        #return Response({'data':str(request.data),'file':archivos},status=status.HTTP_201_CREATED)
+        serializer = EditorialSerializerNormal(data=request.data)
+
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            # Convertir y guardar el modelo
+            editorial = Editorial(**validated_data)
+            editorial.save()
+
+            serializer_response = EditorialSerializerNormal(editorial)    
+           
+            return Response(serializer_response.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Enviar el archivo binario
+
+from rest_framework.parsers import FileUploadParser
+from PIL import Image
+
+class ImageParser(FileUploadParser):
+    media_type = 'image/*'
+
+class EditorialImagenFileUploadParser(APIView):
+    parser_classes = (ImageParser,)
+
+    def post(self, request, *args, **kwargs):
+        if 'file' not in request.data:
+            raise exceptions.ParseError("No has seleccionado el archivo a subir")
+
+        archivo = request.data['file']
+        try:
+            img = Image.open(archivo)
+            img.verify()
+        except:
+            raise exceptions.ParseError("El archivo no es una imagen")
+        
+        editorial = Editorial.objects.get(pk=1)
+        #editorial.logo.save(archivo.name,archivo,save=True)
+        editorial.logo.save('yolopuse.png',archivo,save=True)
+        
+        return Response({'data':str(request.data)},status=status.HTTP_201_CREATED)
+
+# Borrar una imagen
+ 
+class EditorialBorrarImagen(APIView):
+    def get_object(self, pk):
+        editorial = get_object_or_404(Editorial, pk=pk)
+        return editorial
+ 
+    def delete(self,request, pk):
+        editorial = self.get_object(pk)
+        editorial.logo.delete(save=True)
+        #editorial.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 

@@ -19,3 +19,5 @@ traitlets==4.3.3
 wcwidth==0.1.7
 djangorestframework==3.12.2
 django-filter==2.4.0
+Pillow==8.2.0
+drf-extra-fields==3.1.1
