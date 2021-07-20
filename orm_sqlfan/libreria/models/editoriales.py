@@ -16,3 +16,7 @@ class Editorial(models.Model):
     class Meta:
         managed = True
         db_table = 'libreria_editorial'
+    
+    def __str__(self):
+        return f'Editoria {self.nombre}'
+

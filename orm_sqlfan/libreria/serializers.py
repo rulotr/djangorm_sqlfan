@@ -92,3 +92,20 @@ class AutorSerializerProfundo(serializers.ModelSerializer):
         model = Autor
         fields = ['nombre','libros']
 #endregion
+
+class LibroSerializerAgrupar(serializers.ModelSerializer):
+    isbn = serializers.CharField(required=False)
+    paginas = serializers.IntegerField(required=False)
+    categoria = serializers.CharField(required=False)
+    estatus = serializers.CharField(required=False)
+    editorial = EditorialSerializerModel(required=False)
+
+    editorial__nombre = serializers.CharField(required=False)
+    editorial__id = serializers.IntegerField(required=False)
+    edit_pais = serializers.CharField(source='editorial__pais',required=False)
+
+    tot_libros = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = Libro
+        fields = ['isbn','categoria','estatus','editorial','paginas','tot_libros','editorial__id','editorial__nombre','edit_pais']

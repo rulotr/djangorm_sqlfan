@@ -6,7 +6,7 @@ router = DefaultRouter()
 router.register(r'vc_editorial',views.EditorialViewSet, basename='vc_editorial') 
 router.register(r'vcm_editorial',views.EditorialCortoViewSet) 
 router.register(r'vcsl_editorial',views.EditorialSoloLecturaViewSet) 
-router.register(r'vclr_editorial',views.CreateListRetrieveViewSet) 
+router.register(r'vclr_editorial',views.CreateListRetrieveViewSet)  
 
 urlpatterns =[
    path('fv_editorial_falsa/<int:pk>', views.fv_editorial_falsa, name='fv_editorial-falsa'),
@@ -22,11 +22,12 @@ urlpatterns =[
    path('cp_libros/', views.LibroListaCustomApiView.as_view(), name='cp_libros'),
    path('vistas/', include(router.urls)), 
    path('cf_libros/', views.LibroConFiltros.as_view(), name='cf_libros'),
+   path('cf_libros_agrupados/', views.LibroConFiltroAgrupado.as_view(), name='cf_libros_agrupados'),
+  
    path('ex_editorial/', views.EditorialListaConExcepciones.as_view(), name='ex_editorial'),
    path('imagen_editorial_json/', views.EditorialImagenJson.as_view(), name='imagen_editorial_json'),
    path('imagen_editorial_htmlform/', views.EditorialImagenMultiParser.as_view(), name='imagen_editorial_htmlform'),
    path('imagen_editorial_imagen/<str:filename>', views.EditorialImagenFileUploadParser.as_view(), name='imagen_editorial_imagen'),
-   path('imagen_editorial_borrar/<int:pk>', views.EditorialBorrarImagen.as_view(), name='imagen_editorial_borrar'), 
-
+   path('imagen_editorial_borrar/<int:pk>', views.EditorialBorrarImagen.as_view(), name='imagen_editorial_borrar'),  
  ]
 

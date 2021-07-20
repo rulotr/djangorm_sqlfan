@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     #'debug_toolbar',
     'django_filters',
+    'guardian',
     'libreria',
 ]
 
@@ -137,5 +138,5 @@ REST_FRAMEWORK = {
 #      'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 #      'PAGE_SIZE': 3,
 #      'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend',
-#      'EXCEPTION_HANDLER': 'orm_sqlfan.exceptions.custom_exception_handler'
+#      'EXCEPTION_HANDLER': 'orm_sqlfan.exceptions.custom_exception_handler'    
   }

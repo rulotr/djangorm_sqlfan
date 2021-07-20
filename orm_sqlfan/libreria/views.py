@@ -1,8 +1,10 @@
 #from typing_extensions import Required
+import re
 from django.shortcuts import render, get_object_or_404
 
 # Django Rest Framework
 from rest_framework import status, mixins, generics, viewsets
+from rest_framework.fields import BooleanField, DateField
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
@@ -11,7 +13,7 @@ from rest_framework import exceptions
 
 #Models, Serializers
 from .models import (Editorial, Libro)
-from .serializers import (EditorialSerializerModel, LibroSerializer_Tipos,LibroSerializer)
+from .serializers import (EditorialSerializerModel, LibroSerializer_Tipos,LibroSerializer, LibroSerializerAgrupar)
 # Create your views here.
 from orm_sqlfan.exceptions import Excepcion_FaltanCampos
 
@@ -298,6 +300,7 @@ class EditorialViewSet(viewsets.ViewSet):
 
 # Vistas Modelo de conjunto
 
+
 class EditorialCortoViewSet(viewsets.ModelViewSet):
     queryset = Editorial.objects.all()
     serializer_class = EditorialSerializerModel
@@ -359,10 +362,7 @@ class LibroConFiltros(generics.ListAPIView):
         queryset =Libro.objects.all().select_related('editorial')
         return queryset.filter(paginas__gt=0)
     
-
 # Manejo de excepciones
-
-
 
 class EditorialListaConExcepciones(APIView):    
     def get(self, request, format=None):
@@ -488,3 +488,39 @@ class EditorialBorrarImagen(APIView):
         #editorial.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# Filtrado por agrupacion
+
+from django_filters import rest_framework as filters
+from django.db.models import Count,Sum,Max,Min
+
+class FiltroLibro(filters.FilterSet):
+    min_pag = filters.NumberFilter(field_name='paginas', lookup_expr='gte', label='min_pag')
+    #fecha_min = filters.DateFilter(field_name='fecha_publicacion', lookup_expr='gte', label='FecMin')
+    fecha = filters.DateFromToRangeFilter(field_name='fecha_publicacion')
+
+    publicados = filters.BooleanFilter(field_name='estatus', method='solo_publicados')
+
+    agrupar_por = filters.CharFilter(method='filtro_agrupado')
+
+    def solo_publicados(self, queryset, name, value):
+        valor  = 'P' if value else 'M' 
+        return queryset.filter(estatus=valor) 
+
+    def filtro_agrupado(self, queryset, name, value):
+        return queryset.values(*self.request.query_params.getlist('agrupar_por')).annotate(
+            paginas =Sum('paginas'),
+            tot_libros=Count('*')
+        )
+
+    class Meta:
+        model: Libro
+        fields = ['min_pag','fecha','tot_libros']
+
+class LibroConFiltroAgrupado(generics.ListAPIView):
+    serializer_class = LibroSerializerAgrupar
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = FiltroLibro
+
+    def get_queryset(self):
+        queryset =Libro.objects.all().select_related('editorial')
+        return queryset.filter(paginas__gt=0)
