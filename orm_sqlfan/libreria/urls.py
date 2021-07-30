@@ -7,6 +7,7 @@ router.register(r'vc_editorial',views.EditorialViewSet, basename='vc_editorial')
 router.register(r'vcm_editorial',views.EditorialCortoViewSet) 
 router.register(r'vcsl_editorial',views.EditorialSoloLecturaViewSet) 
 router.register(r'vclr_editorial',views.CreateListRetrieveViewSet)  
+router.register(r'usuarios',views.UsuariosVista) 
 
 urlpatterns =[
    path('fv_editorial_falsa/<int:pk>', views.fv_editorial_falsa, name='fv_editorial-falsa'),

@@ -109,3 +109,14 @@ class LibroSerializerAgrupar(serializers.ModelSerializer):
     class Meta:
         model = Libro
         fields = ['isbn','categoria','estatus','editorial','paginas','tot_libros','editorial__id','editorial__nombre','edit_pais']
+
+
+from django.contrib.auth.models import User
+
+class UsuarioSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields =('id','username','password','is_staff')
+        extra_kwargs = {'password': {'write_only': True}}
+

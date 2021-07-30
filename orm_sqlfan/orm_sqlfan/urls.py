@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
     path('api/',include('libreria.urls')),
+    path('api_authorization/', include('rest_framework.urls')),
 ]
 
 if settings.DEBUG:

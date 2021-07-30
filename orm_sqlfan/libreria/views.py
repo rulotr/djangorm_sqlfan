@@ -300,11 +300,13 @@ class EditorialViewSet(viewsets.ViewSet):
 
 # Vistas Modelo de conjunto
 
+#from rest_framework.permissions import DjangoObjectPermissions
 
 class EditorialCortoViewSet(viewsets.ModelViewSet):
     queryset = Editorial.objects.all()
     serializer_class = EditorialSerializerModel
-
+    #permission_classes = [DjangoObjectPermissions]
+    
     @action(detail=False)
     def ultimas_editoriales(self, request):
         ultimas_editoriales = Editorial.objects.all().order_by('-pk')[:5]
@@ -516,6 +518,7 @@ class FiltroLibro(filters.FilterSet):
         model: Libro
         fields = ['min_pag','fecha','tot_libros']
 
+
 class LibroConFiltroAgrupado(generics.ListAPIView):
     serializer_class = LibroSerializerAgrupar
     filter_backends = [DjangoFilterBackend]
@@ -524,3 +527,50 @@ class LibroConFiltroAgrupado(generics.ListAPIView):
     def get_queryset(self):
         queryset =Libro.objects.all().select_related('editorial')
         return queryset.filter(paginas__gt=0)
+
+# Permisos listos para usar
+from django.contrib.auth.models import User
+from .serializers import (UsuarioSerializer)
+from rest_framework.permissions import (IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser, DjangoModelPermissions)
+
+
+# class CustomDjangoModelPermissions(DjangoModelPermissions):
+#     view_permissions = ['%(app_label)s.view_%(model_name)s']
+
+#     perms_map = {
+#         'GET': view_permissions,
+#         'OPTIONS': view_permissions,
+#         'HEAD': view_permissions,
+#         'POST': DjangoModelPermissions.perms_map['POST'],
+#         'PUT': DjangoModelPermissions.perms_map['PUT'],
+#         'PATCH': DjangoModelPermissions.perms_map['PATCH'],
+#         'DELETE': DjangoModelPermissions.perms_map['DELETE'],
+#     }
+
+from copy import deepcopy
+
+class CustomDjangoModelPermissions(DjangoModelPermissions):
+
+    def __init__(self):
+        self.perms_map = deepcopy(self.perms_map)  
+        self.perms_map['GET'] = ['%(app_label)s.view_%(model_name)s']
+
+from orm_sqlfan.permissions import (EsGrupoAdministrador, EsGrupoRevisor, EsIpPermitida )
+class UsuariosVista(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UsuarioSerializer
+    #permission_classes = [IsAuthenticated] 
+    #permission_classes = [IsAuthenticatedOrReadOnly]
+    #permission_classes = [IsAdminUser]
+    #permission_classes = [DjangoModelPermissions]
+    #permission_classes = [CustomDjangoModelPermissions]
+    permission_classes =[EsGrupoRevisor | EsGrupoAdministrador]
+    # def get_permissions(self):
+    #     if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
+    #         return [IsAdminUser()]
+    #     return [IsAuthenticated()]
+
+    def perform_create(self, serializer):
+        	usuario = serializer.save()
+        	usuario.set_password(usuario.password)
+        	usuario.save()
