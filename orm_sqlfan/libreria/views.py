@@ -301,11 +301,12 @@ class EditorialViewSet(viewsets.ViewSet):
 # Vistas Modelo de conjunto
 
 #from rest_framework.permissions import DjangoObjectPermissions
+from rest_framework.permissions import IsAuthenticated
 
 class EditorialCortoViewSet(viewsets.ModelViewSet):
     queryset = Editorial.objects.all()
     serializer_class = EditorialSerializerModel
-    #permission_classes = [DjangoObjectPermissions]
+    permission_classes = [IsAuthenticated]
     
     @action(detail=False)
     def ultimas_editoriales(self, request):
@@ -574,3 +575,68 @@ class UsuariosVista(viewsets.ModelViewSet):
         	usuario = serializer.save()
         	usuario.set_password(usuario.password)
         	usuario.save()
+
+# Vista personalizada para el token
+
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.email
+        })
+
+# Djoser
+from django.urls import reverse
+from djoser.conf import settings as django_settings
+import requests
+class ActivateUserByGet(APIView):
+
+    def get(self, request, uid, token, format = None):
+        payload = {'uid': uid, 'token': token}
+        protocol = 'https' if request.is_secure() else 'http'
+        web_url =  request.get_host()
+        
+        url = '{0}://{1}{2}'.format(protocol,web_url, reverse('user-activation'))
+        response = requests.post(url, data = payload)
+
+        if response.status_code == 204:
+            return Response({'detail': 'Activado de nuevo'})
+        else:
+            return Response(response.json())
+
+# knox
+from django.contrib.auth import login
+
+from rest_framework import permissions
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from knox.views import LoginView as KnoxLoginView
+
+class LoginView(KnoxLoginView):
+    permission_classes = (permissions.AllowAny,)
+    def post(self, request, format=None):
+        serializer = AuthTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request, user)
+        return super(LoginView, self).post(request, format=None)
+
+
+from django.dispatch import receiver
+from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
+
+@receiver(user_logged_in)
+def log_user_login(sender, request, user, **kwargs):
+    if request._auth is not None:
+        print("Borrando token")
+        request._auth.delete()
+    print('Usuario entro')

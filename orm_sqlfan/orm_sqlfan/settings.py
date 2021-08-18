@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
+    'rest_framework.authtoken',
     #'debug_toolbar',
     'django_filters',
+    'djoser',
+    'knox',
     'libreria',
     #'guardian',
 ]
@@ -140,6 +143,7 @@ REST_FRAMEWORK = {
 #      'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend',
 #      'EXCEPTION_HANDLER': 'orm_sqlfan.exceptions.custom_exception_handler'   
 #      'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated',]
+       'DEFAULT_AUTHENTICATION_CLASSES': ['knox.auth.TokenAuthentication',]
   }
 
 # AUTHENTICATION_BACKENDS = (
@@ -147,3 +151,17 @@ REST_FRAMEWORK = {
 #  	 'guardian.backends.ObjectPermissionBackend',
 # 	)
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+DJOSER = {
+    'ACTIVATION_URL': 'api/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+}
+
+from django.utils.timezone import timedelta
+
+REST_KNOX ={
+    #'USER_SERIALIZER': 'accounts.serializer.UserSerializer',
+    'TOKEN_TTL': timedelta(minutes = 1),
+    'TOKEN_LIMIT_PER_USER': 10,
+}
