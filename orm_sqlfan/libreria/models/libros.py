@@ -2,21 +2,23 @@ from django.db import models
 from django.core.exceptions import ObjectDoesNotExist,ValidationError
 from django.db.models import Avg, Min, Max, Count, Sum
 from django.db.models import CharField, Case, F, Q, Value as V, When
-from django.db.models.functions import Concat, Left, Length, Replace
-from django.db.models import Prefetch
+from django.db.models.functions import Concat, Left, Length, Replace, Repeat
+from django.db.models import Prefetch, ExpressionWrapper
 from django.db.models import Window
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.search import SearchVectorField
 
 from .editoriales import Editorial
 from django_tabulate import tabulate_qs
+from django_cte import CTEManager, With
+
 
 def imprimir(func):
     print(tabulate_qs(func))
 
 
 
-class LibroManager(models.Manager):
+class LibroManager(CTEManager):
     def buscar_por_isbn(self, isbn):
         try:
             buscado = self.get(pk=isbn)
@@ -302,6 +304,7 @@ def validar_titulo(titulo):
         raise ValidationError(f'{titulo} no se vende mucho')
     return titulo
 
+
 class Libro(models.Model):
     estatus_libro = (('P', 'Publish'),('M','MEAP'))
 
@@ -327,3 +330,44 @@ class Libro(models.Model):
 
     def __str__(self):
         return self.isbn
+
+# Consultas recursivas
+
+def descendientes_dic(isbn=None, padre=None):
+    lista = []
+    if isbn is not None:
+        padre = Libro.objects.values('isbn','edicion_anterior').get(isbn=isbn)       
+    lista.append(padre)
+    # Buscamos sus descendiente inmediatos
+    hijos=Libro.objects.values('isbn','edicion_anterior').filter(
+        edicion_anterior= padre['isbn'])
+
+    for h in hijos:
+        d = descendientes_dic(padre = h)
+        lista.append(d)
+    return lista
+
+def busqueda_recursiva(isbn_buscar):
+    def cte_recursivo(cte):
+        return Libro.objects.filter(
+            isbn=isbn_buscar
+        ).values('isbn','edicion_anterior',
+                prof=V(0, output_field=models.IntegerField()),
+        ).union(
+            cte.join(Libro, edicion_anterior = cte.col.isbn).values(
+                'isbn','edicion_anterior',
+                prof=cte.col.prof +1,
+            ),
+            all=True # UNION ALL
+        )
+    cte = With.recursive(cte_recursivo)
+    resultado = cte.queryset().with_cte(cte).annotate(
+        path=ExpressionWrapper(
+            Concat(
+                Repeat(V('|---'),F('prof')),
+                F('isbn')
+                ),
+                output_field=CharField(30)))
+
+    for libro in resultado:
+        print(libro)

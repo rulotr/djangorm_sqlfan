@@ -19,3 +19,4 @@ wcwidth==0.1.7
 psycopg2==2.8.5
 tabulate==0.8.7
 django-tabulate==0.1.1
+django-cte==1.1.5
