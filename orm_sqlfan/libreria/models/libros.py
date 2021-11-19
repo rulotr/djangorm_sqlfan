@@ -4,6 +4,7 @@ from django.db.models import Avg, Min, Max, Count, Sum
 from django.db.models import CharField, Case, F, Q, Value as V, When
 from django.db.models.functions import Concat, Left, Length, Replace
 from django.db.models import Prefetch
+from django_cte import CTEManager, CTEQuerySet
 
 from .editoriales import Editorial
 
@@ -314,6 +315,7 @@ class Libro(models.Model):
             titulo='cobol'), name='titulo_no_permitido_chk')]
 
     objects = LibroManager()
+    #objects = CTEManager()
 
     def __str__(self):
         return self.isbn
