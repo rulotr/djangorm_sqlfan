@@ -2,12 +2,13 @@
 
 from django.db import migrations
 
+
 def cargar_script_vista():
     from orm_sqlfan.settings import BASE_DIR
     import os
-    sql_scripts = open(os.path.join(BASE_DIR,'libreria/sql/vista_libros_autor.sql'), 'r').read()
+    sql_scripts = open(os.path.join(
+        BASE_DIR, 'libreria/sql/vista_libros_autor.sql'), 'r').read()
     return sql_scripts
-
 
 
 class Migration(migrations.Migration):
@@ -17,6 +18,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL(cargar_script_vista(),)
+        # migrations.RunSQL(cargar_script_vista(),)
     ]
-

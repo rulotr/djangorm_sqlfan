@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+from django.utils.timezone import timedelta
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -26,7 +27,7 @@ SECRET_KEY = 'myizuz$8rcrr!@br5i7@p6@_5i!ds17b@zs)e#m2bl_qihwu#^'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-INTERNAL_IPS = ['127.0.0.1',]
+INTERNAL_IPS = ['127.0.0.1', ]
 
 # Application definition
 
@@ -40,12 +41,12 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
-    #'debug_toolbar',
+    'debug_toolbar',
     'django_filters',
     'djoser',
     'knox',
     'libreria',
-    #'guardian',
+    # 'guardian',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'orm_sqlfan.urls'
@@ -129,22 +130,22 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL='/archivos/'
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/archivos/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-#INTERNAL_IPS = ['127.0.0.1',]
+INTERNAL_IPS = ['127.0.0.1', ]
 
 # Paginación
 
 # Ponerla de forma global
 REST_FRAMEWORK = {
-#      'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#      'PAGE_SIZE': 3,
-#      'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend',
-#      'EXCEPTION_HANDLER': 'orm_sqlfan.exceptions.custom_exception_handler'   
-#      'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated',]
-       'DEFAULT_AUTHENTICATION_CLASSES': ['knox.auth.TokenAuthentication',]
-  }
+    #      'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    #      'PAGE_SIZE': 3,
+    #      'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend',
+    #      'EXCEPTION_HANDLER': 'orm_sqlfan.exceptions.custom_exception_handler'
+    #      'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated',]
+    'DEFAULT_AUTHENTICATION_CLASSES': ['knox.auth.TokenAuthentication', ]
+}
 
 # AUTHENTICATION_BACKENDS = (
 #      'django.contrib.auth.backends.ModelBackend',
@@ -158,10 +159,9 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
 }
 
-from django.utils.timezone import timedelta
 
-REST_KNOX ={
-    #'USER_SERIALIZER': 'accounts.serializer.UserSerializer',
-    'TOKEN_TTL': timedelta(minutes = 1),
+REST_KNOX = {
+    # 'USER_SERIALIZER': 'accounts.serializer.UserSerializer',
+    'TOKEN_TTL': timedelta(minutes=1),
     'TOKEN_LIMIT_PER_USER': 10,
 }
