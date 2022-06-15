@@ -1,0 +1,48 @@
+SELECT isbn, fecha_publicacion
+FROM public.libreria_libro
+WHERE date_part('year', fecha_publicacion) = 2001
+ORDER BY isbn ASC 
+
+SELECT isbn, titulo,fecha_publicacion
+FROM public.libreria_libro
+WHERE isbn in('1617291951'
+,'1884777678'
+,'1884777678'
+,'1930110006'
+,'1932394230')
+
+
+
+-- Relacion Autor Libro
+select libro_id,autor_id from 
+libreria_autorcapitulo
+where autor_id in(242,180,294,128,210)
+order by libro_id
+
+-- condicion en el where con join
+SELECT a.autor_id,l.isbn,
+l.titulo,fecha_publicacion
+FROM libreria_autorcapitulo  as a
+JOIN  libreria_libro as l
+ON l.isbn = a.libro_id
+WHERE  date_part('year', fecha_publicacion) = 2001
+	
+
+
+-- Condicion en el where
+SELECT a.autor_id,l.isbn, 
+l.titulo,fecha_publicacion
+FROM libreria_autorcapitulo  as a
+LEFT JOIN  libreria_libro as l
+ON l.isbn = a.libro_id
+WHERE  (date_part('year', fecha_publicacion) = 2001
+	 or fecha_publicacion is null)
+
+-- Condicion en el join
+
+SELECT a.autor_id,l.isbn,
+l.titulo,fecha_publicacion
+FROM libreria_autorcapitulo as a
+LEFT JOIN libreria_libro as l
+ON l.isbn = a.libro_id
+AND date_part('year', fecha_publicacion) = 2001
