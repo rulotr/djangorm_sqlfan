@@ -1,0 +1,34 @@
+[
+ {
+  "isbn": "1617290475",
+  "titulo": "SQL Server MVP Deep Dives, Volume 2",
+  "paginas": 750,
+  "editorial": 1,
+  "editorial1": [
+   "Yo soy Kalen Delaney",
+   "Yo soy Louis Davidson",
+   "Yo soy Greg Low",
+   "Yo soy Brad McGehee",
+   "Yo soy Paul Nielsen",
+   "Yo soy Paul Randal",
+   "Yo soy Kimberly Tripp"
+  ],
+  "editorial2": 1,
+  "editorial3": [
+   "Kalen Delaney",
+   "Louis Davidson",
+   "Greg Low",
+   "Brad McGehee",
+   "Paul Nielsen",
+   "Paul Randal",
+   "Kimberly Tripp"
+  ],
+  "editorial4": "/editorial/1",
+  "editorial5": "/editorial/1617290475",
+  "editorial6": {
+   "nombre": "Ariel",
+   "pais": null
+  },
+  "editorial7": "Mi editorial es Ariel y soy de None"
+ }
+]

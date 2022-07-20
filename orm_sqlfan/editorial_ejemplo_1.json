@@ -1,0 +1,403 @@
+[
+ {
+  "nombre": "Alianza",
+  "pais": null,
+  "libro": [
+   {
+    "isbn": "131723979",
+    "titulo": "Visual Object Oriented Programming",
+    "calificaciones": [
+     {
+      "estrellas": 4,
+      "calificacion": "BIEN"
+     },
+     {
+      "estrellas": 5,
+      "calificacion": "ME GUSTO"
+     }
+    ]
+   },
+   {
+    "isbn": "1930110545",
+    "titulo": ".NET Multithreading",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1932394524n-e",
+    "titulo": "Working with the Logging and Discovery Components",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1933988967",
+    "titulo": "Mule in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1884777597",
+    "titulo": "Practical Software Requirements",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290262",
+    "titulo": "Metaprogramming in .NET",
+    "calificaciones": []
+   },
+   {
+    "isbn": "138582262",
+    "titulo": "Illustrated Guide to HTTP",
+    "calificaciones": []
+   },
+   {
+    "isbn": "188477749X",
+    "titulo": "Java Network Programming, Second Edition",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1884777449",
+    "titulo": "Maximum MIDI",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290521",
+    "titulo": "HBase in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290564",
+    "titulo": "50 Android Hacks",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1935182854",
+    "titulo": "Tika in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290556",
+    "titulo": "PowerShell in Depth",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1884777562",
+    "titulo": "The Awesome Power of Java Beans",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290858",
+    "titulo": "Redis in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290114",
+    "titulo": "PowerShell and WMI",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1935182951",
+    "titulo": "Spring Batch in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "188477766X",
+    "titulo": "Java Servlets by Example",
+    "calificaciones": []
+   },
+   {
+    "isbn": "161729134X",
+    "titulo": "C# in Depth, Third Edition",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617292133",
+    "titulo": "Learn SQL Server Administration in a Month of Lunches",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1935182420",
+    "titulo": "Flex 4 in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1932394524c-e",
+    "titulo": "Handling Protocols with the Net Component",
+    "calificaciones": []
+   },
+   {
+    "isbn": "193518217X",
+    "titulo": "OSGi in Depth",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1933988452",
+    "titulo": "Website Owner's Manual",
+    "calificaciones": []
+   },
+   {
+    "isbn": "193398886X",
+    "titulo": "iPhone in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1935182927",
+    "titulo": "Android in Practice",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290017",
+    "titulo": "iOS 4 in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1884777082",
+    "titulo": "Client/Server Yellow Pages",
+    "calificaciones": []
+   },
+   {
+    "isbn": "193518234X",
+    "titulo": "Restlet in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1935182617",
+    "titulo": "iText in Action, Second Edition",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1935182188",
+    "titulo": "Entity Framework 4 in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1930110855",
+    "titulo": "Programming Mac OS X",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1932394907",
+    "titulo": "Windows PowerShell in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "132623129",
+    "titulo": "Microsoft Office Essentials",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1884777694",
+    "titulo": "Implementing Elliptic Curve Cryptography",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1933988266",
+    "titulo": "SOA Patterns",
+    "calificaciones": []
+   },
+   {
+    "isbn": "138411808",
+    "titulo": "Implementing PeopleSoft Financials",
+    "calificaciones": [
+     {
+      "estrellas": 4,
+      "calificacion": "LO MEJOR"
+     }
+    ]
+   },
+   {
+    "isbn": "1935182021",
+    "titulo": "JUnit in Action, Second Edition",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290246",
+    "titulo": "Arduino in Action",
+    "calificaciones": []
+   }
+  ]
+ },
+ {
+  "nombre": "Cr\u00c3\u00adtica",
+  "pais": null,
+  "libro": [
+   {
+    "isbn": "1930110529",
+    "titulo": "JSTL in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "133034054",
+    "titulo": "Graphics File Formats",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1932394524k-e",
+    "titulo": "Managing Components with Modeler",
+    "calificaciones": []
+   },
+   {
+    "isbn": "193398807X",
+    "titulo": "Struts 2 in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1884777929",
+    "titulo": "Essential Guide to Peoplesoft Development and Customization",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1933988398",
+    "titulo": "Gnuplot in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1930110820",
+    "titulo": "Extending and Embedding Perl",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617291056",
+    "titulo": "Kanban in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1935182579",
+    "titulo": "Effective Unit Testing",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1933988665",
+    "titulo": "Algorithms of the Intelligent Web",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1930110995",
+    "titulo": "JUnit in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1933988991",
+    "titulo": "JavaFX in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1932394230",
+    "titulo": "JUnit Recipes",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290173",
+    "titulo": "OpenCL in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1930110561",
+    "titulo": "JMX in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290130",
+    "titulo": "Enterprise OSGi In Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290955",
+    "titulo": "SonarQube in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "132612496",
+    "titulo": "TCP/IP Programming for OS/2",
+    "calificaciones": [
+     {
+      "estrellas": 3,
+      "calificacion": "BUENO"
+     }
+    ]
+   },
+   {
+    "isbn": "1617291218",
+    "titulo": "The Mikado Method",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617291560",
+    "titulo": "Practical Data Science with R",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290084",
+    "titulo": "Specification by Example",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1933988711",
+    "titulo": "Brownfield Application Development in .NET",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1935182463",
+    "titulo": "ASP.NET 4.0 in Practice",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1932394583",
+    "titulo": "POJOs in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1884777481",
+    "titulo": "Inside LotusScript",
+    "calificaciones": []
+   },
+   {
+    "isbn": "132612313",
+    "titulo": "Object Technology Centers of Excellence",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1884777066",
+    "titulo": "Object Oriented Application Frameworks",
+    "calificaciones": []
+   },
+   {
+    "isbn": "013319955X",
+    "titulo": "Comprehensive Networking Glossary and Acronym Guide",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1617290181",
+    "titulo": "Machine Learning in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1930110464",
+    "titulo": "Instant Messaging in Java",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1935182005",
+    "titulo": "PowerShell in Practice",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1932394818",
+    "titulo": "C++/CLI in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1935182587",
+    "titulo": "iPhone and iPad in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1935182773",
+    "titulo": "SharePoint 2010 Web Parts in Action",
+    "calificaciones": []
+   },
+   {
+    "isbn": "1933988770",
+    "titulo": "C++ Concurrency in Action",
+    "calificaciones": []
+   }
+  ]
+ }
+]

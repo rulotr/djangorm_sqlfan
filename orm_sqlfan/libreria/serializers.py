@@ -12,13 +12,13 @@ from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from rest_framework.reverse import reverse
-from django.db.models import Prefetch
+from django.db.models import Prefetch, F
 
 
 # Models
 from libreria.models.autores import Autor
 from libreria.models.editoriales import Editorial
-from libreria.models.libros import Libro
+from libreria.models.libros import Libro,LibroCalificacion
 
 from tabulate import tabulate
 
@@ -121,7 +121,7 @@ class EditorialCustom(serializers.RelatedField):
     def to_representation(self, value):        
         return f'Mi editorial es {value.nombre} y soy de {value.pais}'
 
-
+45
 class LibroSerializer_Tipos(serializers.ModelSerializer):
     editorial1 = serializers.StringRelatedField(source='editorial')
     editorial2 = serializers.PrimaryKeyRelatedField(source='editorial',read_only=True)
@@ -156,7 +156,9 @@ def prueba_del_serializador_modelo_tipos():
     print(tabulate(data2, headers=["Serializer.Data"]))
     print("\n")
     print(tabulate(data3, headers=["Json"]))
-
+    import json
+    with open('serializar_tipos.json', 'w') as file:
+        json.dump(serializer.data, file, indent=1)
     # Relaciones inversas
 
 
@@ -174,13 +176,86 @@ class LibroSerializerSencillo(serializers.ModelSerializer):
         model = Libro
         fields = ['isbn']
 
+class LibroCalificacionSerializerEjemplo(serializers.ModelSerializer):
+
+    class Meta:
+        model = LibroCalificacion
+        fields = ['estrellas','calificacion']
+
+class LibroSerializerEjemplo(serializers.ModelSerializer):
+    calificaciones =LibroCalificacionSerializerEjemplo(many=True, source='libro_calificacion')
+    
+    class Meta:
+        model = Libro
+        fields = ['isbn','titulo','calificaciones']
+
+class EditorialSerializerEjemplo(serializers.ModelSerializer):
+    libro = LibroSerializerEjemplo(many =True, source='libro_editorial')
+    #libro_lista_isbn =serializers.StringRelatedField(  source='libro_editorial',many=True)
+    #libro_lista_titulo =serializers.SlugRelatedField(  source='libro_editorial',slug_field='titulo',read_only=True, many=True)
+   
+    class Meta:
+        model = Editorial
+        fields = ['nombre','pais','libro']
+
+def prueba_ejemplo_1():
+   
+    libro_y_librocapitulos = Libro.objects.filter(estatus='P').prefetch_related('libro_calificacion')
+    editorial = Editorial.objects.filter(pk__in=(2,9)).prefetch_related(
+        Prefetch('libro_editorial', queryset=libro_y_librocapitulos.only('isbn','titulo','editorial'))   )
+    serializer = EditorialSerializerEjemplo(editorial, many=True)
+    json = JSONRenderer().render(serializer.data)
+    
+    # Imprimir datos
+    import json
+
+    with open('editorial_ejemplo_1.json', 'w') as file:
+        json.dump(serializer.data, file, indent=1)
+
+
+class LibroSerializerEjemplo2(serializers.ModelSerializer):
+    #calificaciones =LibroCalificacionSerializerEjemplo(many=True, source='libro_calificacion')
+    
+    class Meta:
+        model = Libro
+        fields = ['isbn','titulo']
+
+
+class EditorialSerializerEjemplo2(serializers.ModelSerializer):
+    estrellas = serializers.IntegerField()
+
+    class Meta:
+        model = Editorial
+        fields = ['nombre','pais','estrellas']
+
+def prueba_ejemplo_2():
+    editoriales = Editorial.objects.all().annotate(
+        libro = F('libro_editorial__isbn'),
+        calificacion_id =F('libro_editorial__libro_calificacion__id'),
+        estrellas=F('libro_editorial__libro_calificacion__estrellas'),
+        ).values('id','nombre','pais','libro','libro_editorial__titulo',
+    'estrellas','calificacion_id').filter(
+        estrellas__gt=0,
+        estrellas__isnull=False)
+
+    print(editoriales)
+    serializer = EditorialSerializerEjemplo2(editoriales, many=True)
+    json = JSONRenderer().render(serializer.data)
+    
+    # Imprimir datos
+    import json
+
+    with open('editorial_ejemplo_2.json', 'w') as file:
+        json.dump(serializer.data, file, indent=1)
+
+
 
 class EditorialSerializerInverso(serializers.ModelSerializer):   
     libro = LibroSerializerSencillo(many=True, read_only=True, source='libro_editorial')
     class Meta:
         model = Editorial
         fields = ['nombre','pais','libro']
-    
+
 def prueba_editorial_inversa():
     editorial = Editorial.objects.get(pk=1)
     serializer = EditorialSerializerInverso(editorial)    
@@ -202,7 +277,6 @@ def prueba_editorial_inversa_muchos():
 
     with open('editorial_libros.json', 'w') as file:
         json.dump(serializer.data, file, indent=1)
-
 
     #Libro.objects.all().values('editorial').annotate(NumeroLibros=Count('*'))
 

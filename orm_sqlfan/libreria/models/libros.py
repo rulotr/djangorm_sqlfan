@@ -295,3 +295,12 @@ class Libro(models.Model):
 
     def __str__(self):
         return self.isbn
+
+
+class LibroCalificacion(models.Model):
+    libro = models.ForeignKey(Libro, on_delete=models.PROTECT, related_name='libro_calificacion',)
+    estrellas = models.PositiveIntegerField()
+    calificacion = models.CharField(max_length=70, blank=True,)
+
+    def __str__(self):
+        return f'La calificacion es {self.calificacion}'
