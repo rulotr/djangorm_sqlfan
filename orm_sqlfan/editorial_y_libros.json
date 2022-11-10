@@ -1,0 +1,488 @@
+[
+ {
+  "id": 1,
+  "nombre": "Ariel",
+  "libros": [
+   {
+    "isbn": "1884777902",
+    "titulo": "3D User Interfaces with Java 3D"
+   },
+   {
+    "isbn": "1932394524l-e",
+    "titulo": "Command-line Processing with CLI"
+   },
+   {
+    "isbn": "161729103X",
+    "titulo": "Extending jQuery"
+   },
+   {
+    "isbn": "1617291021",
+    "titulo": "Solr in Action"
+   },
+   {
+    "isbn": "1930110332",
+    "titulo": "Java 2 Micro Edition"
+   },
+   {
+    "isbn": "1617290319",
+    "titulo": "Silverlight 5 in Action"
+   },
+   {
+    "isbn": "1617290963",
+    "titulo": "Grails in Action, Second Edition"
+   },
+   {
+    "isbn": "1933988134",
+    "titulo": "Spring in Action, Second Edition"
+   },
+   {
+    "isbn": "1617291153",
+    "titulo": "CMIS and Apache Chemistry in Action"
+   },
+   {
+    "isbn": "1930110596",
+    "titulo": "SCWCD Exam Study Kit"
+   },
+   {
+    "isbn": "1617290475",
+    "titulo": "SQL Server MVP Deep Dives, Volume 2"
+   },
+   {
+    "isbn": "1617291420",
+    "titulo": "iOS 7 in Action"
+   },
+   {
+    "isbn": "161729148X",
+    "titulo": "OCP Java SE 7 Programmer II Certification Guide"
+   },
+   {
+    "isbn": "1617292184",
+    "titulo": "PowerShell in Depth, Second Edition"
+   },
+   {
+    "isbn": "193239415X",
+    "titulo": "Hibernate in Action"
+   },
+   {
+    "isbn": "1935182323",
+    "titulo": "jQuery in Action, Second Edition"
+   },
+   {
+    "isbn": "1935182412",
+    "titulo": "Distributed Agile in Action"
+   },
+   {
+    "isbn": "193239477X",
+    "titulo": "ASP.NET 2.0 Web Parts in Action"
+   }
+  ]
+ },
+ {
+  "id": 2,
+  "nombre": "Alianza",
+  "libros": [
+   {
+    "isbn": "131723979",
+    "titulo": "Visual Object Oriented Programming"
+   },
+   {
+    "isbn": "1930110545",
+    "titulo": ".NET Multithreading"
+   },
+   {
+    "isbn": "1932394524n-e",
+    "titulo": "Working with the Logging and Discovery Components"
+   },
+   {
+    "isbn": "1933988967",
+    "titulo": "Mule in Action"
+   },
+   {
+    "isbn": "1884777597",
+    "titulo": "Practical Software Requirements"
+   },
+   {
+    "isbn": "1617290262",
+    "titulo": "Metaprogramming in .NET"
+   },
+   {
+    "isbn": "138582262",
+    "titulo": "Illustrated Guide to HTTP"
+   },
+   {
+    "isbn": "188477749X",
+    "titulo": "Java Network Programming, Second Edition"
+   },
+   {
+    "isbn": "1884777449",
+    "titulo": "Maximum MIDI"
+   },
+   {
+    "isbn": "1617290521",
+    "titulo": "HBase in Action"
+   },
+   {
+    "isbn": "1617290564",
+    "titulo": "50 Android Hacks"
+   },
+   {
+    "isbn": "1935182854",
+    "titulo": "Tika in Action"
+   },
+   {
+    "isbn": "1617290556",
+    "titulo": "PowerShell in Depth"
+   },
+   {
+    "isbn": "1617290165",
+    "titulo": "Augmented Reality Revealed"
+   },
+   {
+    "isbn": "1884777562",
+    "titulo": "The Awesome Power of Java Beans"
+   },
+   {
+    "isbn": "1617290858",
+    "titulo": "Redis in Action"
+   },
+   {
+    "isbn": "1617290114",
+    "titulo": "PowerShell and WMI"
+   },
+   {
+    "isbn": "1935182951",
+    "titulo": "Spring Batch in Action"
+   },
+   {
+    "isbn": "188477766X",
+    "titulo": "Java Servlets by Example"
+   },
+   {
+    "isbn": "1617291242",
+    "titulo": "The Responsive Web"
+   },
+   {
+    "isbn": "161729134X",
+    "titulo": "C# in Depth, Third Edition"
+   },
+   {
+    "isbn": "1617292133",
+    "titulo": "Learn SQL Server Administration in a Month of Lunches"
+   },
+   {
+    "isbn": "1617292214",
+    "titulo": "Chef in Action"
+   },
+   {
+    "isbn": "1617292222",
+    "titulo": "Hadoop in Practice, Second Edition"
+   },
+   {
+    "isbn": "1617292435",
+    "titulo": "Understanding SPAs"
+   },
+   {
+    "isbn": "1935182420",
+    "titulo": "Flex 4 in Action"
+   },
+   {
+    "isbn": "1932394524c-e",
+    "titulo": "Handling Protocols with the Net Component"
+   },
+   {
+    "isbn": "193518217X",
+    "titulo": "OSGi in Depth"
+   },
+   {
+    "isbn": "1933988452",
+    "titulo": "Website Owner's Manual"
+   },
+   {
+    "isbn": "193398886X",
+    "titulo": "iPhone in Action"
+   },
+   {
+    "isbn": "1935182927",
+    "titulo": "Android in Practice"
+   },
+   {
+    "isbn": "1617290017",
+    "titulo": "iOS 4 in Action"
+   },
+   {
+    "isbn": "1884777082",
+    "titulo": "Client/Server Yellow Pages"
+   },
+   {
+    "isbn": "193518234X",
+    "titulo": "Restlet in Action"
+   },
+   {
+    "isbn": "1935182617",
+    "titulo": "iText in Action, Second Edition"
+   },
+   {
+    "isbn": "1935182188",
+    "titulo": "Entity Framework 4 in Action"
+   },
+   {
+    "isbn": "1930110855",
+    "titulo": "Programming Mac OS X"
+   },
+   {
+    "isbn": "1932394907",
+    "titulo": "Windows PowerShell in Action"
+   },
+   {
+    "isbn": "132623129",
+    "titulo": "Microsoft Office Essentials"
+   },
+   {
+    "isbn": "1884777694",
+    "titulo": "Implementing Elliptic Curve Cryptography"
+   },
+   {
+    "isbn": "1933988266",
+    "titulo": "SOA Patterns"
+   },
+   {
+    "isbn": "138411808",
+    "titulo": "Implementing PeopleSoft Financials"
+   },
+   {
+    "isbn": "1935182021",
+    "titulo": "JUnit in Action, Second Edition"
+   },
+   {
+    "isbn": "1617290246",
+    "titulo": "Arduino in Action"
+   },
+   {
+    "isbn": "1617291749",
+    "titulo": "Titanium Alloy in Action"
+   }
+  ]
+ },
+ {
+  "id": 3,
+  "nombre": "Tecnos",
+  "libros": [
+   {
+    "isbn": "1933988592",
+    "titulo": "Team Foundation Server 2008 in Action"
+   },
+   {
+    "isbn": "1932394524f-e",
+    "titulo": "Validating Data with Validator"
+   },
+   {
+    "isbn": "1884777791",
+    "titulo": "Object Oriented Perl"
+   },
+   {
+    "isbn": "1932394613",
+    "titulo": "Ajax in Action"
+   },
+   {
+    "isbn": "1932394524m-e",
+    "titulo": "Understanding and Using Chain"
+   },
+   {
+    "isbn": "1932394389",
+    "titulo": "SCWCD Exam Study Kit Second Edition"
+   },
+   {
+    "isbn": "1617291196",
+    "titulo": "Learn Active Directory Management in a Month of Lunches"
+   },
+   {
+    "isbn": "1884777805",
+    "titulo": "Elements of Programming with Perl"
+   },
+   {
+    "isbn": "1932394834",
+    "titulo": "Laszlo in Action"
+   },
+   {
+    "isbn": "1932394222",
+    "titulo": "Microsoft Reporting Services in Action"
+   },
+   {
+    "isbn": "1617290750",
+    "titulo": "Single Page Web Applications"
+   },
+   {
+    "isbn": "1932394508",
+    "titulo": "Minimal Perl"
+   },
+   {
+    "isbn": "1932394125",
+    "titulo": "JavaServer Faces in Action"
+   },
+   {
+    "isbn": "1884777716",
+    "titulo": "Server-Based Java Programming"
+   },
+   {
+    "isbn": "1930110049",
+    "titulo": "Domino Development with Java"
+   },
+   {
+    "isbn": "1933988347",
+    "titulo": "EJB 3 in Action"
+   },
+   {
+    "isbn": "1935182803",
+    "titulo": "Lift in Action"
+   },
+   {
+    "isbn": "1617291145",
+    "titulo": "AOP in .NET"
+   },
+   {
+    "isbn": "1930110359",
+    "titulo": "Java 3D Programming"
+   },
+   {
+    "isbn": "193011043X",
+    "titulo": "Bitter Java"
+   },
+   {
+    "isbn": "1617290777",
+    "titulo": "Programming the TI-83 Plus/TI-84 Plus"
+   },
+   {
+    "isbn": "1617290793",
+    "titulo": "Play for Scala"
+   },
+   {
+    "isbn": "1617290505",
+    "titulo": "Android in Action, Third Edition"
+   },
+   {
+    "isbn": "1617290548",
+    "titulo": "Third-Party JavaScript "
+   },
+   {
+    "isbn": "1617290238",
+    "titulo": "Hadoop in Practice"
+   },
+   {
+    "isbn": "1617291005",
+    "titulo": "RabbitMQ in Depth"
+   },
+   {
+    "isbn": "1617291250",
+    "titulo": "Fast ASP.NET Websites"
+   },
+   {
+    "isbn": "1617291277",
+    "titulo": "SBT in Action"
+   },
+   {
+    "isbn": "1617291358",
+    "titulo": "Software Development Metrics"
+   },
+   {
+    "isbn": "161729201X",
+    "titulo": "Elixir in Action"
+   },
+   {
+    "isbn": "1617292079",
+    "titulo": "jQuery in Action, Third Edition"
+   },
+   {
+    "isbn": "161729215X",
+    "titulo": "Barcodes with iOS"
+   },
+   {
+    "isbn": "1935182722",
+    "titulo": "Android in Action, Second Edition"
+   },
+   {
+    "isbn": "1935182234",
+    "titulo": "Griffon in Action"
+   },
+   {
+    "isbn": "133046192",
+    "titulo": "Designing Hard Software"
+   },
+   {
+    "isbn": "1933988649",
+    "titulo": "Hibernate Search in Action"
+   },
+   {
+    "isbn": "1933988932",
+    "titulo": "Grails in Action"
+   },
+   {
+    "isbn": "1933988177",
+    "titulo": "Lucene in Action, Second Edition"
+   },
+   {
+    "isbn": "193518248X",
+    "titulo": "Azure in Action"
+   },
+   {
+    "isbn": "1935182390",
+    "titulo": "R in Action"
+   },
+   {
+    "isbn": "1933988053",
+    "titulo": "AspectJ in Action, Second Edition"
+   },
+   {
+    "isbn": "1933988894",
+    "titulo": "Tuscany SCA in Action"
+   },
+   {
+    "isbn": "132869985",
+    "titulo": "Internet BBSs"
+   },
+   {
+    "isbn": "137353006",
+    "titulo": "Client/Server Applications on ATM Networks"
+   },
+   {
+    "isbn": "1884777503",
+    "titulo": "Core OWL 5.0"
+   },
+   {
+    "isbn": "193398869X",
+    "titulo": "Secrets of the JavaScript Ninja"
+   },
+   {
+    "isbn": "1935182048",
+    "titulo": "SQL Server MVP Deep Dives"
+   },
+   {
+    "isbn": "1933988924",
+    "titulo": "Real-World Functional Programming"
+   },
+   {
+    "isbn": "1935182501",
+    "titulo": "Dependency Injection in .NET"
+   },
+   {
+    "isbn": "1930110944",
+    "titulo": "EJB Cookbook"
+   },
+   {
+    "isbn": "1935182358",
+    "titulo": "Spring in Action, Third Edition"
+   },
+   {
+    "isbn": "1935182056",
+    "titulo": "Spring in Practice"
+   },
+   {
+    "isbn": "1617290491",
+    "titulo": "HTML5 in Action"
+   },
+   {
+    "isbn": "1617291706",
+    "titulo": "Programming for Musicians and Digital Artists"
+   }
+  ]
+ }
+]

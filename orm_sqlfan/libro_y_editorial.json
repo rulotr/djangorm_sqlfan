@@ -1,0 +1,18 @@
+[
+ {
+  "isbn": "1884777740",
+  "titulo": "The Quick Python Book",
+  "editorial": {
+   "id": 6,
+   "nombre": "Siglo XXI"
+  }
+ },
+ {
+  "isbn": "193518220X",
+  "titulo": "The Quick Python Book, Second Edition",
+  "editorial": {
+   "id": 8,
+   "nombre": "Pir\u00c3\u00a1mide"
+  }
+ }
+]
