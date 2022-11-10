@@ -265,7 +265,153 @@ class LibroManager(models.Manager):
             for q in p.libros_autores.all():
                 print(f'{q.nombre} ')
 
+    def autores_con_sus_libros_escritos_seleccionado_filas(self):
+        from .autores import Autor
+        autores = Autor.objects.filter(pk__in=(398,523)).prefetch_related('libro')
 
+        for autor in autores:
+            print(f'Autor: {autor}')
+            print('Libros escritos:')
+            for libro in autor.libro.only('isbn','titulo','fecha_publicacion','editorial'):
+                print(f'{libro.isbn} Titulo: {libro.titulo} \
+                Publicado el: {libro.fecha_publicacion}')
+
+
+    def editoriales_con_sus_libros_publicados_seleccionado_filas_f1(self):
+        from .editoriales import Editorial
+        
+        editoriales = Editorial.objects.filter(pk__in=(1,2)).prefetch_related(
+            'libro_editorial')
+     
+        for editorial in editoriales:
+            print(f'Editorial: {editorial}')
+            print('Libros publicados:')
+            for libro in editorial.libro_editorial.values('isbn','titulo','fecha_publicacion','editorial').all():#.defer('imagen') #('isbn','titulo','fecha_publicacion','editorial'):
+                print(f'{libro["isbn"]} Titulo: {libro["titulo"]}\
+                Publicado el: {libro["fecha_publicacion"]}')
+
+            #for libro in editorial.libro_editorial.defer('imagen').all():#.defer('imagen') #('isbn','titulo','fecha_publicacion','editorial'):
+            #    print(f'{libro.isbn} Titulo: {libro.titulo}\
+            #    Publicado el: {libro.fecha_publicacion}')
+
+    def editoriales_con_sus_libros_publicados_seleccionado_filas_f2(self):
+        from .editoriales import Editorial
+        #libros_de_la_editorial = Libro.objects.defer('imagen','desc_corta','estatus') 
+        libros_de_la_editorial = Libro.objects.all().only('isbn','titulo','fecha_publicacion','editorial')
+        
+        editoriales = Editorial.objects.filter(pk__in=(1,2)).prefetch_related(
+            Prefetch('libro_editorial', queryset=libros_de_la_editorial,
+             to_attr='mis_libros'))
+     
+        for editorial in editoriales:
+            print(f'Editorial: {editorial}')
+            print('Libros publicados:')
+            for libro in editorial.mis_libros:
+                 print(f'{libro.isbn} Titulo: {libro.titulo}\
+                 Publicado el: {libro.fecha_publicacion}')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ # Ejemplos usando Prefetch
+    def editoriales_con_sus_libros_publicados_sin_Prefetch(self):
+        from .editoriales import Editorial
+        
+        editoriales = Editorial.objects.filter(pk__in=(1,10,4)).prefetch_related(
+            'libro_editorial')
+     
+        for editorial in editoriales:
+            print(f'********  Editorial {editorial.nombre} ************')
+            print('Libros publicados:')
+            for libro in editorial.libro_editorial.filter(fecha_publicacion__year__gte=2014):
+                 print(f'{libro.isbn} Titulo: {libro.titulo}\
+                 Publicado el: {libro.fecha_publicacion}')
+            print('\n')
+
+
+
+
+
+
+
+    def editoriales_con_sus_libros_publicados_con_Prefetch(self):
+        from django.db.models import Prefetch
+        from .editoriales import Editorial
+        
+        query_libros = Libro.objects.filter(fecha_publicacion__year__gte=2014)
+        libros_prefetch =  Prefetch('libro_editorial', queryset=query_libros, to_attr='atributo_libro')
+
+
+        editoriales = Editorial.objects.filter(pk__in=(1,2,3)).prefetch_related(
+          libros_prefetch
+        )
+     
+        for editorial in editoriales:
+            print(f'********  Editorial {editorial.nombre} ************')
+            print('Libros publicados:')
+            for libro in editorial.atributo_libro:
+                 print(f'{libro.isbn} Titulo: {libro.titulo}\
+                 Publicado el: {libro.fecha_publicacion}')
+            print('\n')
+
+    def consultar_libro_columnas(self):
+        # consulta 1
+        Libro.objects.filter(titulo__endswith='python')
+        Libro.objects.filter(titulo__endswith='python').values('isbn','titulo')
+        Libro.objects.filter(titulo__endswith='python').only('isbn','titulo') 
+        Libro.objects.filter(titulo__endswith='python').defer('desc_corta')
+        # consulta 2
+        query_libros = Libro.objects.filter(titulo__endswith='python')
+        for libro in query_libros.values('isbn','titulo'):
+            print(libro['titulo'])
+        
+        for libro in query_libros.only('isbn','titulo'):
+            print(libro.titulo)
+        
+        # consulta 3 rendimiento
+        for libro in query_libros:
+            print(libro.titulo)
+        
+        for libro in query_libros.only('isbn','titulo'):
+            print(libro.titulo)
+        
+        query_libros = Libro.objects.filter(titulo__endswith='python').only('isbn','titulo')
+
+        # consulta 4 con prefetch_related
+        query_libros = Libro.objects.filter(titulo__endswith='python').prefetch_related('libros_autores')
+        for libro in query_libros:
+            print(f'Libro: {libro.titulo}')
+            for autor in libro.libros_autores.all().only('nombre'):
+                print(f'Autor:{autor.nombre}')
+
+        # consulta 5 usando prefetch
+        from models.autores import Autor
+        query_autores = Autor.objects.all().only('nombre')
+        autor_prefetch =  Prefetch('libros_autores', queryset=query_autores, to_attr='atributo_autor')
+        query_libros=Libro.objects.filter(titulo__endswith='python').prefetch_related(autor_prefetch)
+        
+        for libro in query_libros:
+            print(f'Libro: {libro.titulo}')
+            for autor in libro.atributo_autor:
+                print(f'Autor:{autor.nombre}')
 
 def validar_titulo(titulo):
     if 'cobol' in titulo:
@@ -273,15 +419,13 @@ def validar_titulo(titulo):
     return titulo
 
 class Libro(models.Model):
-    estatus_libro = (('P', 'Publish'),('M','MEAP'))
-
     isbn = models.CharField(max_length=13, primary_key=True)
     titulo = models.CharField(max_length=70, blank=True, validators=[validar_titulo,])
     paginas = models.PositiveIntegerField(db_index=True,)
     fecha_publicacion = models.DateField(null=True)
     imagen = models.URLField(max_length=85, null=True)
     desc_corta = models.CharField(max_length=2000, default='Sin reseña')
-    estatus= models.CharField(max_length=1, choices=estatus_libro)
+    estatus= models.CharField(max_length=1,)
     categoria = models.CharField(max_length=50)
 
     edicion_anterior = models.ForeignKey('self', null=True, default=None, on_delete=models.PROTECT)
@@ -298,7 +442,8 @@ class Libro(models.Model):
 
 
 class LibroCalificacion(models.Model):
-    libro = models.ForeignKey(Libro, on_delete=models.PROTECT, related_name='libro_calificacion',)
+    libro = models.ForeignKey(Libro, related_name='libro_calificacion',
+     on_delete=models.PROTECT,)
     estrellas = models.PositiveIntegerField()
     calificacion = models.CharField(max_length=70, blank=True,)
 

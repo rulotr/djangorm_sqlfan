@@ -5,6 +5,9 @@
 # esto es lo que se llama deserializacion
 
 # System
+from datetime import datetime
+from dis import pretty_flags
+from email.policy import default
 import io
 
 #Django
@@ -19,8 +22,10 @@ from django.db.models import Prefetch, F
 from libreria.models.autores import Autor
 from libreria.models.editoriales import Editorial
 from libreria.models.libros import Libro,LibroCalificacion
+from libreria.models.autor_capitulo import AutorCapitulo
 
 from tabulate import tabulate
+
 
 # Serializacion Basica
 
@@ -187,12 +192,12 @@ class LibroSerializerEjemplo(serializers.ModelSerializer):
     
     class Meta:
         model = Libro
-        fields = ['isbn','titulo','calificaciones']
+        fields = ['isbn','titulo','paginas','calificaciones']
 
 class EditorialSerializerEjemplo(serializers.ModelSerializer):
     libro = LibroSerializerEjemplo(many =True, source='libro_editorial')
     #libro_lista_isbn =serializers.StringRelatedField(  source='libro_editorial',many=True)
-    #libro_lista_titulo =serializers.SlugRelatedField(  source='libro_editorial',slug_field='titulo',read_only=True, many=True)
+    #libro_lista_titulo =serializers.SlugRelatedField( source='libro_editorial',slug_field='titulo',read_only=True, many=True)
    
     class Meta:
         model = Editorial
@@ -202,14 +207,15 @@ def prueba_ejemplo_1():
    
     libro_y_librocapitulos = Libro.objects.filter(estatus='P').prefetch_related('libro_calificacion')
     editorial = Editorial.objects.filter(pk__in=(2,9)).prefetch_related(
-        Prefetch('libro_editorial', queryset=libro_y_librocapitulos.only('isbn','titulo','editorial'))   )
+        Prefetch('libro_editorial', queryset=libro_y_librocapitulos)   )
+
     serializer = EditorialSerializerEjemplo(editorial, many=True)
     json = JSONRenderer().render(serializer.data)
     
     # Imprimir datos
     import json
 
-    with open('editorial_ejemplo_1.json', 'w') as file:
+    with open('editorial_ejemplo_3.json', 'w') as file:
         json.dump(serializer.data, file, indent=1)
 
 
@@ -233,7 +239,8 @@ def prueba_ejemplo_2():
         libro = F('libro_editorial__isbn'),
         calificacion_id =F('libro_editorial__libro_calificacion__id'),
         estrellas=F('libro_editorial__libro_calificacion__estrellas'),
-        ).values('id','nombre','pais','libro','libro_editorial__titulo',
+        ).values(
+            'id','nombre','pais','libro','libro_editorial__titulo',
     'estrellas','calificacion_id').filter(
         estrellas__gt=0,
         estrellas__isnull=False)
@@ -303,6 +310,106 @@ def prueba_autores_libros_editorial():
 
         with open('autor_libros_editorial.json', 'w') as file:
             json.dump(serializer.data, file, indent=1)
+
+class EditorialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Editorial
+        fields = ['id','nombre']
+
+class LibroSerializer(serializers.ModelSerializer):
+    editorial = EditorialSerializer()
+
+    class Meta:
+      
+        model = Libro
+        fields = ['isbn','titulo','editorial']
+
+def ejemplo_libro_editorial_select_related():
+    libro_y_editorial = Libro.objects.filter(
+        titulo__contains=' python ').select_related('editorial').only('isbn','titulo','editorial__id','editorial__nombre')
+    serializer = LibroSerializer(libro_y_editorial, many= True)
+    # Imprimir datos
+    import json
+    with open('libro_y_editorial.json', 'w') as file:
+        json.dump(serializer.data, file, indent=1)
+
+class LibroSerializer2(serializers.ModelSerializer):
+    class Meta: 
+        model = Libro
+        fields = ['isbn','titulo']
+
+
+
+class EditorialSerializer2(serializers.ModelSerializer):
+    libros = LibroSerializer2(many=True, source='lib_edit')
+    class Meta:
+        model = Editorial
+        fields = ['id','nombre','libros']
+
+from django.db import models
+from django.db.models import Value as V, F, Q, Avg, Case, When, ExpressionWrapper
+from django.db.models.functions import TruncDate,Cast, ExtractDay, Now,ExtractMonth, ExtractYear
+from datetime import datetime, timedelta
+
+def ejemplo_edad():
+    #Libro.objects.annotate(edad= TruncDate(V('2020-08-03', output_field=models.DateField())) ).all().first().values('edad')
+    now = datetime.now()
+
+    edad= Libro.objects.annotate(
+        fecha_act= V(now, output_field=models.DateField())
+    ).annotate(fecha_nac= V('1979-09-2', output_field=models.DateField())        
+    ).annotate(dias=ExpressionWrapper( F('fecha_act') - F('fecha_nac') ,
+                    output_field=models.DurationField())
+    ).annotate( edad1= ExtractYear('fecha_act') - ExtractYear(F('fecha_nac')) 
+    ).annotate( edad_v= ExtractYear('fecha_act') - ExtractYear(F('fecha_nac')) -
+         Case(
+            When(Q(fecha_nac__month__gt=ExtractMonth('fecha_act')) | Q(fecha_nac__month= ExtractMonth('fecha_act'), fecha_nac__day__gt= ExtractDay('fecha_act'))  ,
+                  then = V(1)) , 
+            default=V(0),  
+            output_field=models.IntegerField()
+            )
+    ).all(        
+    ).values('fecha_publicacion','fecha_nac','fecha_act','dias','edad1','edad_v'
+    ).first()
+    print(edad)
+    #college_students.annotate(avg_no_of_days=Avg( F('college_start_date') - F('school_passout_date') )
+
+def ejemplo_editorial_libro_prefetch_related():
+    # select_related() Permite realizar una sola consulta
+    # prefetch_related() hace una consulta separada por cada modelo
+
+    #libro_y_editorial = Libro.objectsa.all().select_related('editorial')
+
+    #for libro in libro_y_editorial:
+
+    #    print(f'El libro es {libro}')
+    #    print(f'La editorial es {libro.editorial.nombre}')
+
+
+
+
+    libro_y_calificaciones = Libro.objects.prefetch_related('libro_calificacion')
+
+    for libro in libro_y_calificaciones:
+
+        print(f'El libro es {libro}')
+        for calificacion in libro.libro_calificacion.all():
+            print(f'{calificacion.estrellas} estrellas Calif:{calificacion.calificacion}')
+
+
+
+
+
+
+
+    #   print(f'El libro es {libro["isbn"]}')
+    #    print(f'El libro es {libro["libro_calificacion__estrellas"]}')
+
+        #print(f'La editorial es {libro_calificacion__estrellas'}') '''
+
+    
+
+
 
 # filtro = {}
 # filtro['id'] =18
