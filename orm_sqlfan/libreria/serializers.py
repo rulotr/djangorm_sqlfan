@@ -396,6 +396,13 @@ def ejemplo_editorial_libro_prefetch_related():
         for calificacion in libro.libro_calificacion.all():
             print(f'{calificacion.estrellas} estrellas Calif:{calificacion.calificacion}')
 
+# html y Forms
+
+class LibroSerializerBasico(serializers.ModelSerializer):
+   class Meta:
+        model = Libro
+        fields = ['isbn', 'titulo', 'paginas','fecha_publicacion', 
+        'editorial','imagen']
 
 
 

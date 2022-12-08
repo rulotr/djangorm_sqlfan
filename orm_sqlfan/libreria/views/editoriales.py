@@ -340,6 +340,7 @@ class EditorialListaConExcepciones(APIView):
         #raise Excepcion_FaltanCampos(serializer.errors)
         #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# html y Forms
 
 
 # http://www.cdrf.co

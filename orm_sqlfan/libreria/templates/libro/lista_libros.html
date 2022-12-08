@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+    />
+    {% load static %}
+    <script src="{% static 'js/mis_funciones.js' %}"></script>
+    <title>Listado Libros</title>
+  </head>
+  <body>
+    <h1>Libros en catalogo</h1>
+    <table class="table table-striped table-hover">
+      <tr>
+        <th scope="col">ISBN</th>
+        <th scope="col">Titulo</th>
+        <th scope="col">Imagen</th>
+      </tr>
+      <tbody>
+        {% for libro in libros %}
+        <tr>
+          <th onClick="Mifuncion(this)">{{libro.isbn}}</th>
+          <td>{{libro.titulo}}</td>
+          <td><img src="{{libro.imagen}}" class="img-thumbnail" /></td>
+        </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+  </body>
+</html>

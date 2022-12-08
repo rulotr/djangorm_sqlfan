@@ -15,5 +15,5 @@ class Editorial(models.Model):
         managed = True
         db_table = 'libreria_editorial'
 
-    # def __str__(self):
-    #     return f'Yo soy la editorial {self.nombre}'
+    def __str__(self):
+        return f'Yo soy la editorial {self.nombre}'

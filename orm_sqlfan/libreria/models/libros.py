@@ -449,3 +449,5 @@ class LibroCalificacion(models.Model):
 
     def __str__(self):
         return f'La calificacion es {self.calificacion}'
+
+

@@ -126,7 +126,7 @@ USE_TZ = True
 
 # All settings common to all environments
 STATIC_URL = '/static/'
-
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
 
 ROOT_URLCONF = 'orm_sqlfan.urls'
 

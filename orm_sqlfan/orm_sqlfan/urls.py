@@ -24,8 +24,8 @@ from rest_framework.routers import DefaultRouter
 
 from libreria import views
 from libreria.views import (EditorialExplicitoViewSet, EditorialCortoViewSet
-,EditorialSoloLecturaViewSet,EditorialFiltrosViewSet,EditorialFilterBackendListView)
-#from libreria.views import EditorialViewSet,LibroViewSet
+,EditorialSoloLecturaViewSet,EditorialFiltrosViewSet,EditorialFilterBackendListView,
+LibroLista, LibroDetalle)
 
 
 
@@ -62,6 +62,8 @@ urlpatterns = [
     path('editorial_filtersearch/', views.EditorialSearchFilterListView.as_view()),
     # manejo de exceciones
     path('editorial_excepciones/', views.EditorialListaConExcepciones.as_view()),
+    path('libro_lista/', LibroLista.as_view(), name='libro-lista'),
+    path('libro_detalle/<str:pk>', LibroDetalle.as_view(), name='libro-detalle')
 ]
 
 

@@ -1,0 +1,24 @@
+{% load rest_framework%}
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <h1>ISBN - {{ libro.isbn }}</h1>
+    <h2>Titulo - {{ libro.titulo }}</h2>
+
+    <form action="{% url 'libro-detalle' pk=libro.pk %}" method="POST">
+      <a>{% csrf_token %}</a>
+      {%render_form serializer template_pack='rest_framework/horizontal' %}
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default">Guardar</button>
+        </div>
+      </div>
+    </form>
+  </body>
+</html>
