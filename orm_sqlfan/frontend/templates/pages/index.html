@@ -1,0 +1,36 @@
+{% load rest_framework%}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Librerias del Programador</h1>
+    </header>
+    <div id="filtros" class="btn-group">
+      <button type="button" class="btn btn-secondary">Todos</button>
+      <button type="button" class="btn btn-secondary">Python</button>
+      <button type="button" class="btn btn-secondary">SQL</button>
+    </div>
+    <table class="table table-striped table-hover">
+      <tr>
+        <th scope="col">ISBN</th>
+        <th scope="col">Titulo</th>
+        <th scope="col">Imagen</th>
+      </tr>
+      <tbody id="listado-libros"></tbody>
+    </table>
+    {% load static %}
+    <script type="module" src="{% static 'js/index.js' %}"></script>
+  </body>
+</html>

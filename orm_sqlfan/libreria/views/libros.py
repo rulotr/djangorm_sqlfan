@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from libreria.models import Libro
 from libreria.serializers import LibroSerializerBasico
 from rest_framework.views import APIView
+from rest_framework import viewsets
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from django.shortcuts import redirect, get_object_or_404
 from django.http.response import JsonResponse
@@ -33,3 +34,7 @@ class LibroDetalle(APIView):
         serializer.save()
         return redirect('libro-lista')
 
+
+class LibrosViewSet(viewsets.ModelViewSet):
+    serializer_class = LibroSerializerBasico
+    queryset = Libro.objects.all()
