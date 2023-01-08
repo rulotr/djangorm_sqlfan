@@ -37,7 +37,7 @@ function mostrarLibros(datos){
 }
 
 btnFiltros.addEventListener('click', function(event){
-    const lib = obtenerLibros().then((libros )=>{ 
+    const lib = obtenerLibros(event.target.innerHTML).then((libros )=>{ 
         mostrarLibros(libros)})
     //console.log(event.target.innerHTML)
     

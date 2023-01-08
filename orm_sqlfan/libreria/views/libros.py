@@ -6,6 +6,7 @@ from rest_framework import viewsets
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from django.shortcuts import redirect, get_object_or_404
 from django.http.response import JsonResponse
+from django_filters.rest_framework import DjangoFilterBackend
 
 class LibroLista(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -38,3 +39,7 @@ class LibroDetalle(APIView):
 class LibrosViewSet(viewsets.ModelViewSet):
     serializer_class = LibroSerializerBasico
     queryset = Libro.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = {
+        'titulo': ['contains'],
+    }
