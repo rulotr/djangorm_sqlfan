@@ -15,3 +15,17 @@ export async function obtenerLibros(filtro) {
         return Promise.reject(Error(response.statusText));
     }
 }
+
+
+export async function obtenerDetalleLibro(isbn) {
+    let ruta_api = api_get + isbn
+    const response = await fetch( ruta_api , {
+        method: 'GET'
+    });
+
+    if (response.ok) {
+        return response.json();
+    } else {
+        return Promise.reject(Error(response.statusText));
+    }
+}

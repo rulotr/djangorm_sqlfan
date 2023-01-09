@@ -402,7 +402,7 @@ class LibroSerializerBasico(serializers.ModelSerializer):
    class Meta:
         model = Libro
         fields = ['isbn', 'titulo', 'paginas','fecha_publicacion', 
-        'editorial','imagen']
+        'editorial','imagen', 'desc_corta']
 
 
 
