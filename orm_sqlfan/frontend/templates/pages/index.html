@@ -16,17 +16,18 @@
   <body>
     <header>
       <h1>Librerias del Programador</h1>
-    </header>
-    <div class="container text-center">
-      <div class="row">
-        <div id="filtros" class="btn-group">
-          <button type="button" class="btn btn-secondary">Todos</button>
-          <button type="button" class="btn btn-secondary">Python</button>
-          <button type="button" class="btn btn-secondary">SQL</button>
-          <button type="button" class="btn btn-secondary">HTML</button>
+
+      <div class="container text-center">
+        <div class="row">
+          <div id="filtros" class="btn-group">
+            <button type="button" class="btn btn-secondary">Todos</button>
+            <button type="button" class="btn btn-secondary">Python</button>
+            <button type="button" class="btn btn-secondary">SQL</button>
+            <button type="button" class="btn btn-secondary">HTML</button>
+          </div>
         </div>
       </div>
-    </div>
+    </header>
 
     <div class="row">
       <div class="col-md-6">
@@ -63,7 +64,7 @@
               <input type="number" class="form-control" id="inputPaginas" />
             </div>
           </div>
-          <div class="row mb-3">
+          <div class="row">
             <label for="inputPaginas" class="col-sm-2 col-form-label"
               >Descripcion</label
             >
@@ -73,6 +74,13 @@
                 aria-label="With textarea"
                 id="textDescripcion"
               ></textarea>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button class="btn btn-primary" type="button" id="btnGuardar">
+                  Guardar
+                </button>
+              </div>
             </div>
           </div>
         </form>

@@ -1,14 +1,13 @@
 import {
     obtenerLibros,
     obtenerDetalleLibro,
+    guardarLibro
 } from './api.js'
 
 
 const btnFiltros = document.getElementById('filtros');
-console.log(btnFiltros)
-var clickHandler = function (index) {
-    alert("Vas a filtrar por " + index);
-}
+const btnGuardar = document.getElementById('btnGuardar');
+
 
 function mostrarDetalleLibros(datos){
     console.log(datos)
@@ -65,4 +64,18 @@ function mostrarLibros(datos){
 btnFiltros.addEventListener('click', function(event){
     const lib = obtenerLibros(event.target.innerHTML).then((libros )=>{ 
         mostrarLibros(libros)})
+})
+
+btnGuardar.addEventListener('click', function(event){
+    const inputIsbn = document.getElementById('inputIsbn').value
+    const inputPaginas = document.getElementById('inputPaginas').value
+    const textDescripcion = document.getElementById('textDescripcion').value
+
+    const lib = guardarLibro(inputIsbn,inputPaginas,textDescripcion).then((libro )=>{ 
+        console.log("libro guardado")})
+
+    console.log(inputIsbn)
+    console.log(inputPaginas)
+    console.log(textDescripcion)
+    
 })

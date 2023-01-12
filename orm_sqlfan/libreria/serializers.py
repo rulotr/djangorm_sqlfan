@@ -134,7 +134,7 @@ class LibroSerializer_Tipos(serializers.ModelSerializer):
     editorial4 = serializers.HyperlinkedRelatedField(source='editorial',view_name='editorial-detail',read_only=True)
     editorial5 = serializers.HyperlinkedIdentityField(source='editorial',view_name='editorial-detail',read_only=True)
     editorial6 = EditorialSerializerBasico(source='editorial')
-    editorial7 = EditorialCustom(source='editorial',read_only=True)
+    editorial7 = EditorialCustom(read_only=True)
 
     class Meta:
         model = Libro
@@ -204,11 +204,12 @@ class EditorialSerializerEjemplo(serializers.ModelSerializer):
         fields = ['nombre','pais','libro']
 
 def prueba_ejemplo_1():
-   
+    
     libro_y_librocapitulos = Libro.objects.filter(estatus='P').prefetch_related('libro_calificacion')
     editorial = Editorial.objects.filter(pk__in=(2,9)).prefetch_related(
         Prefetch('libro_editorial', queryset=libro_y_librocapitulos)   )
 
+   
     serializer = EditorialSerializerEjemplo(editorial, many=True)
     json = JSONRenderer().render(serializer.data)
     
@@ -403,6 +404,7 @@ class LibroSerializerBasico(serializers.ModelSerializer):
         model = Libro
         fields = ['isbn', 'titulo', 'paginas','fecha_publicacion', 
         'editorial','imagen', 'desc_corta']
+        read_only_fields = ['editorial']
 
 
 
