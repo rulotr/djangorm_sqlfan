@@ -21,7 +21,7 @@ from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 #from libreria.views import editorial_detail
 
-from frontend.views import HomePage
+from frontend.views import HomePage, HomePageWithAlpine
 from libreria import views
 from libreria.views import (EditorialExplicitoViewSet, EditorialCortoViewSet
 ,EditorialSoloLecturaViewSet,EditorialFiltrosViewSet,EditorialFilterBackendListView,
@@ -64,7 +64,9 @@ urlpatterns = [
     path('editorial_excepciones/', views.EditorialListaConExcepciones.as_view()),
     path('libro_lista/', LibroLista.as_view(), name='libro-lista'),
     path('libro_detalle/<str:pk>', LibroDetalle.as_view(), name='libro-detalle'),
-    path('home/', HomePage.as_view(), name='home-page')
+    path('home/', HomePage.as_view(), name='home-page'),
+    path('home_whith_alpine/', HomePageWithAlpine.as_view(), name='home-page-with-alpine'),
+    
 ]
 
 

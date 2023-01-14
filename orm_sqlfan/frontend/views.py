@@ -11,3 +11,10 @@ class HomePage(APIView):
 
     def get(self, request):
         return Response()
+
+class HomePageWithAlpine(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'pages/indexWithAlpine.html'
+
+    def get(self, request):
+        return Response()
