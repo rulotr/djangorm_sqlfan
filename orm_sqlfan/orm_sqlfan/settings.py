@@ -25,7 +25,18 @@ SECRET_KEY = 'myizuz$8rcrr!@br5i7@p6@_5i!ds17b@zs)e#m2bl_qihwu#^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS=[]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOWED_ORIGINS =[
+    "http://localhost:8000",
+]
+#CORS_ORIGIN_WHITELIST = (
+#       'http://localhost:8000',
+#)
+
+
 
 INTERNAL_IPS = ['127.0.0.1',]
 
@@ -42,6 +53,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework',
     'django_filters',
+    #'corsheaders',
     'libreria',
     'frontend',
 ]
@@ -55,6 +67,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 

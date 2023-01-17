@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="“UTF-8”" />
+    <meta
+      name="“viewport”"
+      content="“width"
+      ="device-width,"
+      initial-scale="1.0”"
+    />
+    <meta http-equiv="“X-UA-Compatible”" content="“ie" ="edge”" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+    />
+    <title>Libreria del programador</title>
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <div
+      x-cloak
+      x-data="{
+        libros: [], 
+        estaCargando: true,
+        filtro: '',
+        dato_libro: {isbn:'',titulo:'', paginas:'', desc_corta:''},
+        obtenerLibros(){
+            fetch('http://127.0.0.1:8000/api/libro_view/'+ this.filtro)
+            .then(response => response.json())
+            .then(response => { 
+                    this.libros = response.resultado; this.estaCargando = false; 
+                    console.log(this.libros); });
+        },
+        guardarLibro(){
+          fetch('http://127.0.0.1:8000/api/libro_view/' + this.dato_libro.isbn + '/',
+           {
+              method: 'PUT',
+              body: JSON.stringify(this.dato_libro),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+           })
+        .then(response => {
+             if (response.ok) {alert('Libro guardado!')}
+             else {alert('No se pudo guardar el libro')}
+        })
+      },   
+    }"
+      x-init="obtenerLibros()"
+    >
+      <div class="container text-center">
+        <div class="row">
+          <div id="filtros" class="btn-group">
+            <button x-on:click="filtro=''; obtenerLibros()">TODOS</button>
+            <button
+              x-on:click="filtro='?titulo__contains=python'; obtenerLibros() "
+            >
+              PYTHON
+            </button>
+            <button
+              x-on:click="filtro='?titulo__contains=sql'; obtenerLibros()"
+            >
+              SQL
+            </button>
+            <button
+              x-on:click="filtro='?titulo__contains=html'; obtenerLibros()"
+            >
+              HTML
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <h1 x-show="estaCargando">Cargando...</h1>
+          <table class="table" x-show="!estaCargando">
+            <tr>
+              <th>Isbn</th>
+              <th>Titulo</th>
+              <th>Imagen</th>
+            </tr>
+            <template x-for="libro in libros" :key="libro.isbn">
+              <tr>
+                <td
+                  x-on:click="dato_libro.isbn=libro.isbn; dato_libro.titulo=libro.titulo; dato_libro.paginas=libro.paginas; dato_libro.desc_corta=libro.desc_corta "
+                  x-text="libro.isbn"
+                ></td>
+                <td x-text="libro.titulo"></td>
+                <td><img :src="libro.imagen" /></td>
+              </tr>
+            </template>
+          </table>
+        </div>
+        <div class="col-md-6">
+          <div>
+            <div class="row mb-3">
+              <label for="inputIsbn">Name:</label>
+              <input id="inputIsbn" type="text" x-model="dato_libro.isbn" />
+            </div>
+            <div class="row mb-3">
+              <label for="inputTitulo">Titulo:</label>
+              <input id="inputTitulo" type="text" x-model="dato_libro.titulo" />
+            </div>
+            <div class="row mb-3">
+              <label for="inputPaginas">Paginas:</label>
+              <input
+                id="inputPaginas"
+                type="text"
+                x-model="dato_libro.paginas"
+              />
+            </div>
+            <div class="row mb-3">
+              <label for="inputDescripcion">Descripcion:</label>
+              <textarea
+                class="form-control"
+                aria-label="With textarea"
+                id="textDescripcion"
+                x-model="dato_libro.desc_corta"
+              ></textarea>
+            </div>
+            <div class="row">
+              <button @click="guardarLibro()">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
