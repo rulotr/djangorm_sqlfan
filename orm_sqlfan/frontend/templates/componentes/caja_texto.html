@@ -1,0 +1,13 @@
+<div class="row mb-3">
+  <label for="input{{titulo}}">{{titulo}}:</label>
+  {% if tipo == "textarea"%}
+  <textarea
+    class="form-control"
+    aria-label="With textarea"
+    id="text{{titulo}}"
+    x-model="{{campo}}"
+  ></textarea>
+  {% else %}
+  <input id="input{{titulo}}" type="{{tipo}}" x-model="{{campo}}" />
+  {% endif %}
+</div>

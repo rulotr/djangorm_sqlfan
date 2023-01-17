@@ -17,11 +17,14 @@
       defer
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
+    {% load static %}
+    <script type="module" src="{% static 'js/api.js' %}"></script>
   </head>
   <body>
     {% block heading %}
     <h1>Librerias del Programador</h1>
     {% endblock heading %} {% block content %} {% endblock content %}
+
     <p>a {% comment %}</p>
 
     <p>

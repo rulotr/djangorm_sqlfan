@@ -1,8 +1,12 @@
 <!-- templates/indexWithAlpine.html -->
 
 {% extends "pages\base.html" %} {% load componentes_html %}
+<!-- prettier-ignore-->
 <p>
-  {% block heading %} {{block.super}} {% endblock heading %} {% block content %}
+  {% block heading %} 
+  {{block.super}}
+  {% endblock heading %} 
+  {% block content %}
 </p>
 
 <div
@@ -38,19 +42,13 @@
 >
   <div class="container text-center">
     <div class="row">
+      <!-- prettier-ignore-->
       <div id="filtros" class="btn-group">
-        <button x-on:click="filtro=''; obtenerLibros()">TODOS</button>
-        <button
-          x-on:click="filtro='?titulo__contains=python'; obtenerLibros() "
-        >
-          PYTHON
-        </button>
-        <button x-on:click="filtro='?titulo__contains=sql'; obtenerLibros()">
-          SQL
-        </button>
-        <button x-on:click="filtro='?titulo__contains=html'; obtenerLibros()">
-          HTML
-        </button>
+        {% mostrar_boton "TODOS" %} 
+        {% mostrar_boton "JAVA" %} 
+        {% mostrar_boton "PYTHON" %} 
+        {% mostrar_boton "SQL" %} 
+        {% mostrar_boton "HTML" %}
       </div>
     </div>
   </div>
@@ -77,27 +75,14 @@
     </div>
     <div class="col-md-6">
       <div>
-        <div class="row mb-3">
-          <label for="inputIsbn">Name:</label>
-          <input id="inputIsbn" type="text" x-model="dato_libro.isbn" />
-        </div>
-        <div class="row mb-3">
-          <label for="inputTitulo">Titulo:</label>
-          <input id="inputTitulo" type="text" x-model="dato_libro.titulo" />
-        </div>
-        <div class="row mb-3">
-          <label for="inputPaginas">Paginas:</label>
-          <input id="inputPaginas" type="text" x-model="dato_libro.paginas" />
-        </div>
-        <div class="row mb-3">
-          <label for="inputDescripcion">Descripcion:</label>
-          <textarea
-            class="form-control"
-            aria-label="With textarea"
-            id="textDescripcion"
-            x-model="dato_libro.desc_corta"
-          ></textarea>
-        </div>
+        <!-- prettier-ignore -->
+        <p>
+        {%mostrar_caja_texto "Isbn" "dato_libro.isbn" "text" %} 
+        {%mostrar_caja_texto "Titulo" "dato_libro.titulo" "text"%}
+        {%mostrar_caja_texto "Paginas" "dato_libro.paginas" "number" %}
+        {%mostrar_caja_texto "Descripcion" "dato_libro.desc_corta" "textarea" %}
+      </p>
+
         <div class="row">
           <button @click="guardarLibro()">Guardar</button>
         </div>
