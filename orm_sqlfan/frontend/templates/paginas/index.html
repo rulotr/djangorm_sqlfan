@@ -5,19 +5,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Librerias de Progamador</title>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <header>
     <h1>Librerias del Programador</h1>
 </header>
 <body>
-    <div>   
+    <div x-data="{
+        libros: [{isbn:'1',titulo: 'libro 1'},{isbn:'2',titulo: 'libro 2'} ]
+    }">   
         <table class="table">
         <tr>
           <th scope="col">ISBN</th>
           <th scope="col">Titulo</th>
           <th scope="col">Imagen</th>
         </tr>
-        <tbody id="listado-libros"></tbody>
+        <tbody id="listado-libros">
+            <template x-for="libro in libros" :key="libro.isbn">
+                <tr>
+                  <td  x-text="libro.isbn"></td>
+                  <td x-text="libro.titulo"></td>
+                </tr>
+              </template>
+        </tbody>
         </table>
     </div>
 
