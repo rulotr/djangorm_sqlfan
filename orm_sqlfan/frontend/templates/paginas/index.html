@@ -11,25 +11,40 @@
     <h1>Librerias del Programador</h1>
 </header>
 <body>
-    <div x-data="{
-        libros: [{isbn:'1',titulo: 'libro 1'},{isbn:'2',titulo: 'libro 2'} ]
-    }">   
+    <div x-data="varAlpine()">   
         <table class="table">
         <tr>
-          <th scope="col">ISBN</th>
+          <th scope="col">Isbn</th>
           <th scope="col">Titulo</th>
           <th scope="col">Imagen</th>
         </tr>
         <tbody id="listado-libros">
             <template x-for="libro in libros" :key="libro.isbn">
                 <tr>
-                  <td  x-text="libro.isbn"></td>
+                  <td  x-text="libro.isbn" x-on:click="mostrarDetalle(libro.isbn, libro.titulo)" ></td>
                   <td x-text="libro.titulo"></td>
                 </tr>
               </template>
         </tbody>
         </table>
+        <div>
+            <label for="inputIsbn">Isbn:</label>
+            <input id="inputIsbn" type="text" x-model=detalles.isbn />
+            <label for="inputIsbn">Titulo:</label>
+            <input id="inputIsbn" type="text" x-model=detalles.titulo  />
+        </div>
     </div>
-
+<script>
+    function varAlpine(){
+        return{
+            detalles: {isbn: "", titulo: ""},
+            libros: [{isbn:'1',titulo: 'libro 1'},{isbn:'2',titulo: 'libro 2'} ],
+            mostrarDetalle: function(isbn, titulo){
+               this.detalles.isbn = isbn
+               this.detalles.titulo = titulo     
+            }
+        }
+    }
+</script>
 </body>
 </html>
