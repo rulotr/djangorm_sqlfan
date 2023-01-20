@@ -5,40 +5,74 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Librerias de Progamador</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<header>
-    <h1>Librerias del Programador</h1>
-</header>
+<br>
+    <h2 class="ui  header">
+        <i class="book icon"></i>
+        <div class="content">
+            Librerias del Programador
+        </div>
+    </h2>
+
 <body>
-    <div x-data="varAlpine()">   
-        <table class="table">
-        <tr>
-          <th scope="col">Isbn</th>
-          <th scope="col">Titulo</th>
-          <th scope="col">Imagen</th>
-        </tr>
+  <div class="ui container">
+    <div class="ui grid"  x-data="varAlpine()"> 
+        <div class="ten wide column">  
+            <div class="ui icon input">
+                <input type="text" placeholder="Buscar por titulo...">
+                <i class="inverted circular search link icon"></i>
+            </div>
+        <table class="ui celled structured padded table selectable striped">
+        <thead>  
+            <tr>
+                <th class="three wide" scope="col">Isbn</th>
+                <th class="eight wide" scope="col">Titulo</th>
+                <th class="five wide" scope="col">Imagen</th>
+            </tr>
+        </thead>
         <tbody id="listado-libros">
             <template x-for="libro in libros" :key="libro.isbn">
                 <tr>
-                  <td  x-text="libro.isbn" x-on:click="mostrarDetalle(libro.isbn, libro.titulo)" ></td>
+                  <td x-text="libro.isbn" x-on:click="mostrarDetalle(libro.isbn, libro.titulo)" ></td>
                   <td x-text="libro.titulo"></td>
                 </tr>
               </template>
         </tbody>
         </table>
-        <div>
-            <label for="inputIsbn">Isbn:</label>
-            <input id="inputIsbn" type="text" x-model=detalles.isbn />
-            <label for="inputIsbn">Titulo:</label>
-            <input id="inputIsbn" type="text" x-model=detalles.titulo  />
+        </div>
+        <div class="five wide column">  
+        <div class="ui inverted segment">
+            <div class="ui mini inverted form">
+                <div class="inline field">
+                    <div class="ui large labeled input right left icon">
+                        <i class="book icon"></i>
+                        <input id="inputIsbn" placeholder="Ibsn del libro" type="text" x-model=detalles.isbn />
+                        <a class="ui tag label">Isbn</a>
+                    </div>
+                </div>
+                <br>
+                <div class="inline field">
+                <div class="ui large labeled input">
+                    <div class="ui label">Titulo</div>
+                    <input id="inputTitulo" placeholder="Titulo del libro" type="text" x-model=detalles.titulo />
+                </div>
+              </div> 
+              <br>   
+              <div class="ui submit button">Guardar</div>
+            </div>
+            </div>
+        </div>
         </div>
     </div>
+   </div>
 <script>
     function varAlpine(){
         return{
             detalles: {isbn: "", titulo: ""},
-            libros: [{isbn:'1',titulo: 'libro 1'},{isbn:'2',titulo: 'libro 2'} ],
+            libros: [{isbn:'1',titulo: 'libro 1'},{isbn:'2',titulo: 'libro 2'},{isbn:'3',titulo: 'libro 3'} ],
             mostrarDetalle: function(isbn, titulo){
                this.detalles.isbn = isbn
                this.detalles.titulo = titulo     
