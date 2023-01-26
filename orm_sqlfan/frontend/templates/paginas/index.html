@@ -15,29 +15,34 @@
         <div class="content">
             Librerias del Programador
         </div>
+        <div class="content">
+            Catalogo de libros
+        </div>
     </h2>
 
 <body>
   <div class="ui container">
-    <div class="ui grid"  x-data="varAlpine()"> 
+    <div class="ui grid"  x-data="varAlpine()" x-init="buscar()" > 
         <div class="ten wide column">  
-            <div class="ui icon input">
-                <input type="text" placeholder="Buscar por titulo...">
+            <div class="ui icon input ">
+                <input type="text" x-model="caja_filtro"  @keydown.enter='buscar()' placeholder="Buscar por titulo...">
                 <i class="inverted circular search link icon"></i>
             </div>
-        <table class="ui celled structured padded table selectable striped">
+        <h1 x-show="estaCargando">Cargando...</h1>
+        <table x-ref ="tabla" x-show="!estaCargando" class="ui celled structured padded table selectable striped">
         <thead>  
             <tr>
-                <th class="three wide" scope="col">Isbn</th>
-                <th class="eight wide" scope="col">Titulo</th>
+                <th class="four wide" scope="col">Isbn</th>
+                <th class="seven wide" scope="col">Titulo</th>
                 <th class="five wide" scope="col">Imagen</th>
             </tr>
         </thead>
         <tbody id="listado-libros">
-            <template x-for="libro in libros" :key="libro.isbn">
+            <template x-show="estaCargando" x-for="libro in libros" :key="libro.isbn">
                 <tr>
-                  <td x-text="libro.isbn" x-on:click="mostrarDetalle(libro.isbn, libro.titulo)" ></td>
+                  <td x-text="libro.isbn" x-on:click="mostrarDetalle(libro)" ></td>
                   <td x-text="libro.titulo"></td>
+                  <td><img class="ui small image" :src="libro.imagen"  alt="Portada"></td>
                 </tr>
               </template>
         </tbody>
@@ -47,21 +52,27 @@
         <div class="ui inverted segment">
             <div class="ui mini inverted form">
                 <div class="inline field">
-                    <div class="ui large labeled input right left icon">
-                        <i class="book icon"></i>
-                        <input id="inputIsbn" placeholder="Ibsn del libro" type="text" x-model=detalles.isbn />
-                        <a class="ui tag label">Isbn</a>
+                    <div  class="ui  large labeled input right left icon">
+                        <i class="book orange icon"></i>
+                        <input x-ref="mi-caja-isbn"  id="inputIsbn" placeholder="Ibsn del libro" type="text" x-model=detalles.isbn />
+                        <a class="ui orange tag label">Isbn</a>
                     </div>
                 </div>
                 <br>
                 <div class="inline field">
                 <div class="ui large labeled input">
-                    <div class="ui label">Titulo</div>
+                    <div class="ui orange label">Titulo</div>
                     <input id="inputTitulo" placeholder="Titulo del libro" type="text" x-model=detalles.titulo />
+                </div>
+              </div>
+              <div class="inline field">
+                <div class="ui large labeled input">
+                    <div class="ui orange label">Paginas</div>
+                    <input id="inputPaginas" placeholder="Paginas" type="number" x-model=detalles.paginas />
                 </div>
               </div> 
               <br>   
-              <div class="ui submit button">Guardar</div>
+              <button x-ref="botonGuardar" class="ui button" @click="modificarLibro()">Guardar</button>
             </div>
             </div>
         </div>
@@ -71,13 +82,55 @@
 <script>
     function varAlpine(){
         return{
-            detalles: {isbn: "", titulo: ""},
-            libros: [{isbn:'1',titulo: 'libro 1'},{isbn:'2',titulo: 'libro 2'},{isbn:'3',titulo: 'libro 3'} ],
-            mostrarDetalle: function(isbn, titulo){
-               this.detalles.isbn = isbn
-               this.detalles.titulo = titulo     
+            url: "http://127.0.0.1:8000/api/libro_view/",
+            caja_filtro: "",
+            estaCargando: true,
+            detalles: {isbn: "", titulo: "",paginas:0},
+            libros: [],
+            mostrarDetalle: function(libro){
+               this.detalles.isbn = libro.isbn
+               this.detalles.titulo = libro.titulo 
+               this.detalles.paginas = libro.paginas  
+               this.validarDatos()  
+            },
+            buscar(){
+                let filtrado = (this.caja_filtro=="") ? '' : '?titulo__contains=' +  this.caja_filtro
+                this.apiListar(filtrado)
+            },
+            apiListar:function(filtrado){
+                fetch(this.url + filtrado).
+                then(response=> response.json()).
+                then((list_libros)=>{
+                    this.libros = list_libros.resultado;   
+                    this.estaCargando=false
+                    this.validarDatos()
+                }).
+                catch(console.log)
+            },
+            modificarLibro:function(){
+                if(this.validarDatos()){
+                var datos = {method:"PUT", body: JSON.stringify(this.detalles),headers: {
+                'Content-Type': 'application/json'}
+                 }
+                fetch(this.url  + this.detalles.isbn + '/', datos)
+                .then(response => {
+                  if(response.ok) {
+                    alert('Libro guardado!')
+                    this.buscar()
+                }
+                  else{alert('No se pudo guardar el libro') }
+                }).
+                catch( error=>
+                    alert('No se pudo guardar el libro')
+                )
             }
-        }
+            },
+            validarDatos:function(){
+                    const isbn_valido = this.detalles.isbn.length>=10
+                    this.$refs.botonGuardar.disabled=!isbn_valido;
+                    return isbn_valido
+            }
+      }   
     }
 </script>
 </body>
