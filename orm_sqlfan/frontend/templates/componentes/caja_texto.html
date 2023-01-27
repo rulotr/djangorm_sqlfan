@@ -1,0 +1,17 @@
+<!-- templates/componentes/caja_texto.html-->
+
+<div class="inline field">
+    <div class="ui large labeled input right left icon">
+        {% if campo_llave %}
+        <i class="book orange icon"></i>
+        {% endif %}
+        {% if not campo_llave %}
+        <div class="ui orange label"> {{titulo}}</div>
+        {% endif %}
+        <input  x-ref="{{referencia}}" id="input{{titulo}}" placeholder="{{titulo}}" type="{{tipo}}" x-model={{campo}} />
+        {% if campo_llave %}
+        <a class="ui orange tag label">{{titulo}}</a>
+        {% endif %}
+    </div>
+  </div> 
+

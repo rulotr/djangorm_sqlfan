@@ -1,6 +1,7 @@
 <!-- templates\pages\index.html -->
 
 {% extends "paginas\base.html" %}
+{% load componentes_html %}
 {% block titulo %}
 {{block.super}}
 {% endblock titulo %}
@@ -35,26 +36,10 @@
         <div class="five wide column">  
         <div class="ui inverted segment">
             <div class="ui mini inverted form">
-                <div class="inline field">
-                    <div  class="ui  large labeled input right left icon">
-                        <i class="book orange icon"></i>
-                        <input x-ref="mi-caja-isbn"  id="inputIsbn" placeholder="Ibsn del libro" type="text" x-model=detalles.isbn />
-                        <a class="ui orange tag label">Isbn</a>
-                    </div>
-                </div>
-                <br>
-                <div class="inline field">
-                <div class="ui large labeled input">
-                    <div class="ui orange label">Titulo</div>
-                    <input id="inputTitulo" placeholder="Titulo del libro" type="text" x-model=detalles.titulo />
-                </div>
-              </div>
-              <div class="inline field">
-                <div class="ui large labeled input">
-                    <div class="ui orange label">Paginas</div>
-                    <input id="inputPaginas" placeholder="Paginas" type="number" x-model=detalles.paginas />
-                </div>
-              </div> 
+               <br>
+              {% mostrar_boton titulo="ISBN" campo="detalles.isbn" tipo="text" campo_llave=True referencia="mi-caja-isbn"  %}
+              {% mostrar_boton titulo="Titulo" campo="detalles.titulo" tipo="text"  %}
+              {% mostrar_boton "Paginas" "detalles.paginas" "number"  %}
               <br>   
               <button x-ref="botonGuardar" class="ui button" @click="modificarLibro()">Guardar</button>
             </div>
