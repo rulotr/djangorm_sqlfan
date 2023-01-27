@@ -1,29 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Librerias de Progamador</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    {% load static %}
-    <script  src="{% static 'js/app.js' %}"></script>
-</head>
-<br>
-    <h2 class="ui  header">
-        <i class="book icon"></i>
-        <div class="content">
-            Librerias del Programador
-        </div>
-        <div class="content">
-            Catalogo de libros
-        </div>
-    </h2>
+<!-- templates\pages\index.html -->
 
-<body>
-  <div class="ui container">
+{% extends "paginas\base.html" %}
+{% block titulo %}
+{{block.super}}
+{% endblock titulo %}
+{% block contenido %} 
+ <div class="ui container">
     <div class="ui grid"  x-data="varAlpine()" x-init="buscar()" > 
         <div class="ten wide column">  
             <div class="ui icon input ">
@@ -81,5 +63,4 @@
         </div>
     </div>
    </div>
-</body>
-</html>
+{% endblock contenido %}
