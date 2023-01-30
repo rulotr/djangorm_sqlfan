@@ -1,0 +1,46 @@
+<!-- templates\pages\index.html -->
+
+{% extends "paginas\base.html" %}
+{% load componentes_html %}
+{% block titulo %}
+{{block.super}}
+{% endblock titulo %}
+{% block contenido %} 
+ <div class="ui container">
+    <div class="ui grid"  x-data="varAlpine()" x-init="buscarAutores()" > 
+        <div class="ten wide column">  
+            <div class="ui icon input ">
+                <input type="text" x-model="caja_filtro"  @keydown.enter='buscarAutores()' placeholder="Buscar por nombre...">
+                <i class="inverted circular search link icon"></i>
+            </div>
+        <h1 x-show="estaCargando">Cargando...</h1>
+        <table x-ref ="tabla" x-show="!estaCargando" class="ui celled structured padded table selectable striped">
+        <thead>  
+            <tr>
+                <th class="four wide" scope="col">Id</th>
+                <th class="seven wide" scope="col">Nombre</th>
+            </tr>
+        </thead>
+        <tbody id="listado-autores">
+            <template x-show="estaCargando" x-for="autor in autores" :key="autor.id">
+                <tr>
+                  <td x-text="autor.id" x-on:click="mostrarDetalleAutor(autor)" ></td>
+                  <td x-text="autor.nombre"></td>
+                </tr>
+              </template>
+        </tbody>
+        </table>
+        </div>
+        <div class="five wide column">  
+        <div class="ui inverted segment">
+            <div class="ui mini inverted form">
+               <br>
+              {% mostrar_boton titulo="Id" campo="detalles_autor.id" tipo="text" campo_llave=True referencia="mi-caja-id-autor"  %}
+              {% mostrar_boton titulo="Nombre" campo="detalles_autor.nombre" tipo="text"  %}
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+   </div>
+{% endblock contenido %}

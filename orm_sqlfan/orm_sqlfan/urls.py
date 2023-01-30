@@ -21,11 +21,12 @@ from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 #from libreria.views import editorial_detail
 
-from frontend.views import HomePage
+from frontend.views import HomePage, HomePageAutor
 from libreria import views
 from libreria.views import (EditorialExplicitoViewSet, EditorialCortoViewSet
 ,EditorialSoloLecturaViewSet,EditorialFiltrosViewSet,EditorialFilterBackendListView,
-    LibrosViewSet)
+    LibrosViewSet, AutorViewSet)
+
 #from libreria.views import EditorialViewSet,LibroViewSet
 
 
@@ -37,6 +38,7 @@ router.register(r'editorial_corto', EditorialCortoViewSet, basename='editorialco
 router.register(r'editorial_lectura', EditorialSoloLecturaViewSet, basename='editoriallectura')
 router.register(r'editorial_filtros', EditorialFiltrosViewSet, basename='editorialfiltros')
 router.register(r'libro_view', LibrosViewSet, basename='libros_viewset')
+router.register(r'autor_view', AutorViewSet, basename='autor_viewset')
 
 
 
@@ -63,7 +65,9 @@ urlpatterns = [
     path('editorial_filtersearch/', views.EditorialSearchFilterListView.as_view()),
     # manejo de exceciones
     path('editorial_excepciones/', views.EditorialListaConExcepciones.as_view()),
-    path('home/', HomePage.as_view(), name='home-page'),
+    path('home/', HomePage.as_view(), name='home-libros'),
+    path('home_autores/', HomePageAutor.as_view(), name='home-autores'),
+
 ]
 
 

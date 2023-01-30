@@ -12,6 +12,10 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     {% load static %}
     <script  src="{% static 'js/app.js' %}"></script>
+    <div class="ui three item menu">
+        <a class="active item" href="{% url 'home-libros' %}">Libros</a>
+        <a class="item" href="{% url 'home-autores' %}">Autores</a>
+    </div>
 </head>
 <br>
     {% block titulo %}
@@ -21,7 +25,8 @@
             Librerias del Programador
         </div>
         <div class="content">
-            Catalogo de libros
+            {{nombre_catalogo}}
+           
         </div>
     </h2>
     {% endblock titulo %}
